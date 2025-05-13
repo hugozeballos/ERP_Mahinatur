@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Vista formulario -->
+    <record id="view_tour_minimal_form" model="ir.ui.view">
+        <field name="name">tour.minimal.form</field>
+        <field name="model">tour.minimal</field>
+        <field name="arch" type="xml">
+            <form string="Tour Minimal">
+                <header>
+                    <!-- Statusbar mostrando los estados draft, confirmed, executed -->
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,confirmed,executed"
+                        statusbar_colors='{"draft":"grey","confirmed":"blue","executed":"green"}'/>
+                    <!-- Botones sin modifiers -->
+                    <button name="action_confirm"
+                            string="Confirmar Tour"
+                            type="object"
+                            class="btn-secondary"/>
+                    <button name="action_execute"
+                            string="Ejecutar Tour"
+                            type="object"
+                            class="btn-primary"/>
+                    <button name="action_cancel"
+                            string="Cancelar Tour"
+                            type="object"
+                            class="btn-light"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="max_capacity"/>
+                            <field name="available_seats" readonly="1"/>
+                            
+                            <field name="tour_type"/>
+                            <field name="include_park_ticket"/>
+                        </group>
+                        <group>
+                            <field name="language_id"/>
+                            <field name="guide_id" domain="[('languages_spoken','in', [language_id])]"/>
+                            <field name="guide_cost"/>
+                        </group>
+                        <group>
+                            <field name="driver_id"/>
+                            <field name="driver_cost"/>
+                            <field name="vehicle_id"/>
+                            <field name="vehicle_cost"/>
+                            <field name="total_cost" readonly="1" force_save="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Participantes">
+                            <field name="participants_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="almuerzo" widget="boolean_toggle"/>
+                                    <field name="tipo_almuerzo"/>
+                                    <field name="sale_order_id"/>
+                                </tree>
+                                <form string="Participante">
+                                    <sheet>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="almuerzo"/>
+                                            <field name="tipo_almuerzo"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista lista -->
+    <record id="view_tour_minimal_tree" model="ir.ui.view">
+        <field name="name">tour.minimal.tree</field>
+        <field name="model">tour.minimal</field>
+        <field name="arch" type="xml">
+            <tree string="Tours">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="max_capacity"/>
+                <field name="available_seats"/>
+                <field name="total_cost" readonly="1" force_save="1"/>
+                <field name="language_id"/>
+                <field name="tour_type"/>
+                <field name="include_park_ticket"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- vista calendario -->
+    <record id="view_tour_minimal_calendar" model="ir.ui.view">
+        <field name="name">tour.minimal.calendar</field>
+        <field name="model">tour.minimal</field>
+        <field name="arch" type="xml">
+            <calendar
+                string="Calendario de Tours"
+                date_start="date_start"
+                date_stop="date_end"
+                color="guide_id"
+                mode="week">
+                <field name="name"/>
+                <field name="guide_id"/>
+                <field name="vehicle_id"/>
+            </calendar>
+        </field>
+    </record>
+
+        <!-- Acción -->
+    <record id="action_tour_minimal" model="ir.actions.act_window">
+        <field name="name">Gestión de Tours</field>
+        <field name="res_model">tour.minimal</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="view_tour_minimal_calendar"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menú raíz -->
+    <menuitem id="menu_tour_minimal_root"
+              name="Gestión de Tours"
+              sequence="10"
+              action="action_tour_minimal"
+              web_icon="tour_minimal_odoo17,static/description/icon.png"/>
+</odoo>
+

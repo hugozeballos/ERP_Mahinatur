@@ -1,0 +1,7 @@
+<odoo>
+  <!-- Grupo de supervisores de tours -->
+  <record id="group_tour_supervisor" model="res.groups">
+    <field name="name">Supervisor de Tours</field>
+    <!-- puedes omitir category_id o usar base.module_category_human_resources -->
+  </record>
+</odoo>

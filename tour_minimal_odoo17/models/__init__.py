@@ -1,0 +1,9 @@
+from . import tour
+from . import participant
+from . import sale_order_line_inherit
+from . import participant_wizard_line
+from . import sale_order_inherit
+from . import product_template_extension
+from . import hr_employee_extend
+from . import hr_contract_extend
+

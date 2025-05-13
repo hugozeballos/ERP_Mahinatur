@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <record id="view_hr_contract_form_currency_dropdown" model="ir.ui.view">
+      <field name="name">hr.contract.form.currency.dropdown</field>
+      <field name="model">hr.contract</field>
+      <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+      <field name="arch" type="xml">
+        <!-- 1) Asegúrate de que no esté invisible ni readonly -->
+        <xpath expr="//field[@name='currency_id']" position="attributes">
+          <attribute name="invisible">0</attribute>
+          <attribute name="readonly">0</attribute>
+          <!-- opcional: evitas crear monedas desde aquí -->
+          <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
+          <!-- 2) Sólo monedas activas -->
+          <attribute name="domain">[('active','=',True)]</attribute>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
