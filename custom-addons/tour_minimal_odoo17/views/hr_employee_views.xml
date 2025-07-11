@@ -1,0 +1,16 @@
+<odoo>
+  <record id="view_hr_employee_form_inherit_languages" model="ir.ui.view">
+    <field name="name">hr.employee.form.inherit.languages</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_form"/>
+    <field name="arch" type="xml">
+      <!-- Inserta tu campo justo después de Work Email -->
+      <xpath expr="//field[@name='work_email']" position="after">
+        <group>
+          <field name="languages_spoken" widget="many2many_tags"
+                 placeholder="Selecciona uno o varios idiomas"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>

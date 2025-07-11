@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <!-- 1) Vista calendario para tu modelo de reservas externas -->
+    <record id="view_tour_external_reservation_calendar" model="ir.ui.view">
+      <field name="name">tour.external.reservation.calendar</field>
+      <field name="model">tour.external.reservation</field>
+      <field name="arch" type="xml">
+        <calendar string="Reservas Externas"
+                  date_start="reservation_date"
+                  date_stop="reservation_date">
+          <field name="name"/>
+        </calendar>
+      </field>
+    </record>
+
+    <!-- 2) Vista árbol (lista) para las reservas externas -->
+    <record id="view_tour_external_reservation_tree" model="ir.ui.view">
+      <field name="name">tour.external.reservation.tree</field>
+      <field name="model">tour.external.reservation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="product_id"/>
+          <field name="reservation_date"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- 3) Acción que abre el calendario (y lista) en la ventana principal -->
+    <record id="action_tour_external_reservation_calendar" model="ir.actions.act_window">
+      <field name="name">Reservas Externas</field>
+      <field name="res_model">tour.external.reservation</field>
+      <field name="view_mode">calendar,tree,form</field>
+      <field name="view_id" ref="view_tour_external_reservation_calendar"/>
+      <field name="target">current</field>
+    </record>
+
+    <!-- 4) Menú dentro de 'Gestión de Tours' -->
+    <menuitem id="menu_external_activity"
+              name="Reservas Externas"
+              parent="menu_tour_minimal_root"
+              action="action_tour_external_reservation_calendar"
+              sequence="20"/>
+              
+  </data>
+</odoo>

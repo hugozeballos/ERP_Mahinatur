@@ -1,0 +1,167 @@
+<odoo>
+    <!-- Tree -->
+    <record id="rental_booking_tree" model="ir.ui.view">
+        <field name="name">rental.booking.tree</field>
+        <field name="model">rental.booking</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Reservas">
+                <field name="name"/>
+                <field name="customer_id"/>
+                <field name="vehicle_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state"/>
+                <field name="price_total"/>
+                <field name="no_charge_delay"/>
+                <field name="no_charge_reason"/>
+                <field name="delay_hours"/>
+            </tree>
+        </field>
+    </record>
+
+        <!-- Form -->
+    <record id="rental_booking_form" model="ir.ui.view">
+        <field name="name">rental.booking.form</field>
+        <field name="model">rental.booking</field>
+        <field name="type">form</field>
+        <field name="priority" eval="30"/>
+        <field name="arch" type="xml">
+            <form string="Reserva">
+                <header>
+                    <!-- Solo visible en borrador -->
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirmar"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <!-- Solo visible en confirmada -->
+                    <button name="action_rented"
+                            type="object"
+                            string="Entregar"
+                            class="btn-primary"
+                            invisible="state != 'confirmed'"/>
+                    <!-- Solo visible en entregada -->
+                    <button name="action_returned"
+                            type="object"
+                            string="Recibir"
+                            class="btn-success"
+                            invisible="state != 'rented'"/>
+                    <!-- Solo visible en draft o confirmed -->
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancelar"
+                            class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="customer_id" readonly="1"/>
+                        <field name="vehicle_id" readonly="1"/>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="date_start" readonly="1"/>
+                        <field name="date_end" readonly="1"/>
+                        <field name="days_qty" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="price_total" readonly="1"/>
+                        <field name="sale_order_id" readonly="1"/>
+                        <field name="no_charge_delay"/>
+                        <field name="no_charge_reason"/>
+                        <field name="delay_hours"/>
+                    </group>
+                    <!-- Solo en estado rented -->
+                    <group>
+                        <field name="late_reason"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="rental_booking_form_mods" model="ir.ui.view">
+        <field name="name">rental.booking.form.mods</field>
+        <field name="model">rental.booking</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="rental_minimal.rental_booking_form"/>
+        <field name="priority" eval="50"/>
+        <field name="arch" type="xml">
+            <!-- Confirmar solo en draft -->
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+            <attribute name="modifiers">{'invisible': [['state','!=','draft']]}</attribute>
+            </xpath>
+            <!-- Entregar solo en confirmed -->
+            <xpath expr="//button[@name='action_rented']" position="attributes">
+            <attribute name="modifiers">{'invisible': [['state','!=','confirmed']]}</attribute>
+            </xpath>
+            <!-- Recibir solo en rented -->
+            <xpath expr="//button[@name='action_returned']" position="attributes">
+            <attribute name="modifiers">{'invisible': [['state','!=','rented']]}</attribute>
+            </xpath>
+            <!-- Cancelar solo en draft o confirmed -->
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+            <attribute name="modifiers">{'invisible': [['state','not in',['draft','confirmed']]]}</attribute>
+            </xpath>
+            <!-- Grupo de late_reason solo en rented -->
+            <xpath expr="//group[field[@name='late_reason']]" position="attributes">
+            <attribute name="modifiers">{'invisible': [['state','!=','rented']]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+       <!-- Vista calendario para rental.booking -->
+    <record id="rental_booking_calendar_view" model="ir.ui.view">
+        <field name="name">rental.booking.calendar</field>
+        <field name="model">rental.booking</field>
+        <field name="type">calendar</field>
+        <field name="arch" type="xml">
+            <calendar string="Reservas  Calendario"
+                    date_start="date_start"
+                    date_stop="date_end"
+                    mode="month"
+                    color="state"/>
+        </field>
+    </record>
+
+    <!-- Vista Kanban x auto y llama a la vista de calendario por auto -->
+    <record id="action_fleet_vehicle_kanban_rental" model="ir.actions.act_window">
+        <field name="name">Disponibilidad por Auto</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="view_fleet_vehicle_kanban_rental"/>
+    </record>
+
+
+    <!-- Acción que fuerza el uso de calendar, tree y tu form override -->
+    <record id="action_rental_booking_calendar" model="ir.actions.act_window">
+        <field name="name">Reservas Calendario</field>
+        <field name="res_model">rental.booking</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_ids" eval="[(5,0,0),(0,0,{'view_mode':'calendar','view_id':ref('rental_minimal.rental_booking_calendar_view')}),(0,0,{'view_mode':'tree','view_id':ref('rental_minimal.rental_booking_tree')}),(0,0,{'view_mode':'form','view_id':ref('rental_minimal.rental_booking_form')})]"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Menú Raíz -->
+    <menuitem id="menu_rental_root"
+              name="Arriendos"
+              sequence="10"
+              groups="rental_minimal.group_rental_user"/>
+
+    <!-- Menú Reservas -->
+    <menuitem id="menu_rental_booking"
+              name="Reservas"
+              parent="menu_rental_root"
+              action="action_rental_booking_calendar"
+              sequence="1"
+              groups="rental_minimal.group_rental_user"/>
+
+        <!-- Menú para kanban x auto -->
+    <menuitem id="menu_rental_vehicle_availability"
+            name="Disponibilidad por Auto"
+            parent="menu_rental_root"
+            action="action_fleet_vehicle_kanban_rental"/>
+
+</odoo>

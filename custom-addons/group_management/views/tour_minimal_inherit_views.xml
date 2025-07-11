@@ -1,0 +1,19 @@
+<odoo>
+  <record id="view_tour_minimal_form_inherit_group" model="ir.ui.view">
+    <!-- un nombre único para esta herencia -->
+    <field name="name">tour.minimal.form.inherit.group</field>
+    <!-- indicamos que heredamos la vista original -->
+    <field name="inherit_id" ref="tour_minimal_odoo17.view_tour_minimal_form"/>
+    <field name="model">tour.minimal</field>
+    <field name="arch" type="xml">
+      <!-- localizamos el lugar donde queremos insertar -->
+      <xpath expr="//group[field[@name='available_seats']]" position="after">
+        <!-- aquí metemos nuestro bloque -->
+        <group>
+          <field name="group_id" readonly="1"/>
+          <field name="template_id" readonly="1"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+</odoo>
