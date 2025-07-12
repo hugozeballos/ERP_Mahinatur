@@ -1,0 +1,37 @@
+<odoo>
+    <record id="view_fleet_vehicle_form_rental" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.rental</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group" position="after">
+                <group string="Arriendo">
+                    <field name="is_available_for_rent" string="¿Disponible para Arriendo?"/>
+                    <field name="rental_status" string="Estado de Arriendo" modifiers='{"invisible": [["is_available_for_rent", "=", false]]}'/>
+                    <field name="price_per_day" string="Precio por Día"/>
+                    <field name="price_per_extra_hour" string="Precio por Hora Extra"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- vista Calendario x auto -->
+    <record id="view_fleet_vehicle_kanban_rental" model="ir.ui.view">
+        <field name="name">fleet.vehicle.kanban.rental</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div><strong><field name="license_plate"/></strong></div>
+                            <div><field name="model_id"/></div>
+                            <a type="object" name="action_open_calendar_view"
+                            class="btn btn-primary mt8">Ver Calendario</a>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

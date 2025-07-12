@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tour_minimal_user,tour.minimal.user,model_tour_minimal,base.group_user,1,1,1,1
+access_tour_participant_user,tour.participant.user,model_tour_participant,base.group_user,1,1,1,1
+access_tour_selection_wizard_user,tour.selection.wizard.user,model_tour_selection_wizard,base.group_user,1,1,1,0
+access_tour_participant_wizard_line,tour.participant.wizard.line,model_tour_participant_wizard_line,,1,1,1,1
+access_tour_minimal_admin,tour.minimal.admin,model_tour_minimal,,1,1,1,1
+access_tour_participant_admin,tour.participant.admin,model_tour_participant,,1,1,1,1
+access_tour_selection_wizard_admin,tour.selection.wizard.admin,model_tour_selection_wizard,,1,1,1,0
+access_tour_selection_external_wizard_user,tour.selection.external.wizard,model_tour_selection_external_wizard,base.group_user,1,1,1,0
+access_tour_selection_external_wizard_user,tour.selection.external.wizard,model_tour_selection_external_wizard,base.group_user,1,1,1,0
+access_tour_external_reservation_user,tour.external.reservation,model_tour_external_reservation,base.group_user,1,1,1,0

@@ -1,0 +1,32 @@
+# Ignorar todo por defecto
+*
+
+# Permitir explícitamente custom-addons
+!.gitignore
+!custom_addons/
+!custom_addons/**
+# Archivos temporales de Python
+*.pyc
+*.pyo
+__pycache__/
+
+# Archivos temporales del sistema
+*.swp
+*.swo
+*.bak
+*.tmp
+*~
+
+# Logs
+*.log
+
+# Archivos de configuración de entorno
+.env
+
+# Archivos de configuración de IDE
+.vscod
+.idea/
+
+# Archivos específicos de Odoo
+*.zip
+.DS_Store

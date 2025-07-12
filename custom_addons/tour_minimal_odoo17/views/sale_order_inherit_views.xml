@@ -1,0 +1,16 @@
+<odoo>
+  <record id="view_sale_order_form_inherit_config_tour" model="ir.ui.view">
+      <field name="name">sale.order.form.inherit.config.tour</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/> <!-- importante -->
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
+              <button name="open_configure_tour_wizard"
+                      string="Configurar Tour"
+                      type="object"
+                      class="btn btn-secondary"
+                      context="{'active_id': id}"/>
+          </xpath>
+      </field>
+  </record>
+</odoo>

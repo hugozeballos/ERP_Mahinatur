@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <record id="tour_selection_external_wizard_form" model="ir.ui.view">
+      <field name="name">tour.selection.external.wizard.form</field>
+      <field name="model">tour.selection.external.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Reservar Tour Externo">
+            <group>
+              <field name="sale_order_line_id" readonly="1"/>
+              <field name="reservation_date"/>
+            </group>
+            <footer>
+            <button name="action_confirm_external"
+                    string="Aceptar"
+                    type="object"
+                    class="btn-primary"/>
+            <button string="Cancelar"
+                    class="btn-secondary"
+                    special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,5 @@
+<odoo noupdate="1">
+  <record id="product_category_arriendo" model="product.category">
+    <field name="name">Arriendo</field>
+  </record>
+</odoo>

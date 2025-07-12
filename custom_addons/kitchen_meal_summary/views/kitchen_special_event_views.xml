@@ -1,0 +1,69 @@
+<!-- views/kitchen_special_event_views.xml -->
+<odoo>
+  <record id="view_kitchen_special_event_tree" model="ir.ui.view">
+    <field name="name">kitchen.special.event.tree</field>
+    <field name="model">kitchen.special.event</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="date"/>
+        <field name="location"/>
+        <field name="expected_people"/>
+        <field name="participant_count"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_kitchen_special_event_form" model="ir.ui.view">
+    <field name="name">kitchen.special.event.form</field>
+    <field name="model">kitchen.special.event</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="date"/>
+            <field name="expected_people"/>
+            <field name="participant_count" readonly="1"/>
+            <field name="cooks_ids" widget="many2many_tags"/>
+            <field name="waiters_ids" widget="many2many_tags"/>
+            <field name="notes"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_kitchen_special_event" model="ir.actions.act_window">
+    <field name="name">Eventos Especiales</field>
+    <field name="res_model">kitchen.special.event</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="action_update_all_event" model="ir.actions.server">
+    <field name="name">Actualizar Eventos</field>
+    <field name="model_id" ref="model_kitchen_special_event"/>
+    <field name="state">code</field>
+    <field name="code">env['kitchen.special.event'].action_actualizar_todos_eventos()</field>
+  </record>
+<!-- Menú principal de cocina ya existente -->
+<menuitem id="menu_kitchen_meal_root" name="Cocina"/>
+
+<!-- Submenú: Eventos Especiales (sin acción, solo contenedor) -->
+<menuitem id="menu_kitchen_special_event_root"
+          name="Eventos Especiales"
+          parent="menu_kitchen_meal_root"/>
+
+<!-- Acción que muestra la lista de eventos especiales -->
+<menuitem id="menu_kitchen_special_event"
+          name="Ver Eventos"
+          parent="menu_kitchen_special_event_root"
+          action="action_kitchen_special_event"/>
+
+<!-- Acción para actualizar eventos especiales -->
+<menuitem id="menu_kitchen_all_event"
+          name="Actualizar Eventos"
+          parent="menu_kitchen_special_event_root"
+          action="action_update_all_event"/>
+  
+</odoo>
