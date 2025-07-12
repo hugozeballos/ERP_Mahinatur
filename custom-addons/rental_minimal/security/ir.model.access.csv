@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_fleet_vehicle_rental_user,access.fleet.vehicle.rental.user,model_fleet_vehicle,base.group_user,1,1,0,0
-access_rental_booking_user,access.rental.booking.user,model_rental_booking,base.group_user,1,1,1,0
-access_rental_return_wizard,rental.return.wizard,model_rental_return_wizard,,1,1,1,0

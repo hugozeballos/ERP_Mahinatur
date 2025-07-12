@@ -1,6 +1,0 @@
-<odoo>
-    <record id="group_rental_user" model="res.groups">
-        <field name="name">Rental / User</field>
-        <field name="category_id" ref="base.module_category_sales"/>
-    </record>
-</odoo>
