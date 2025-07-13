@@ -51,8 +51,7 @@
                     <button name="action_cancel"
                             type="object"
                             string="Cancelar"
-                            class="btn-secondary"
-                            invisible="state != 'draft'"/>
+                            class="btn-secondary"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -82,35 +81,6 @@
         </field>
     </record>
 
-    <record id="rental_booking_form_mods" model="ir.ui.view">
-        <field name="name">rental.booking.form.mods</field>
-        <field name="model">rental.booking</field>
-        <field name="type">form</field>
-        <field name="inherit_id" ref="rental_minimal.rental_booking_form"/>
-        <field name="priority" eval="50"/>
-        <field name="arch" type="xml">
-            <!-- Confirmar solo en draft -->
-            <xpath expr="//button[@name='action_confirm']" position="attributes">
-            <attribute name="modifiers">{'invisible': [['state','!=','draft']]}</attribute>
-            </xpath>
-            <!-- Entregar solo en confirmed -->
-            <xpath expr="//button[@name='action_rented']" position="attributes">
-            <attribute name="modifiers">{'invisible': [['state','!=','confirmed']]}</attribute>
-            </xpath>
-            <!-- Recibir solo en rented -->
-            <xpath expr="//button[@name='action_returned']" position="attributes">
-            <attribute name="modifiers">{'invisible': [['state','!=','rented']]}</attribute>
-            </xpath>
-            <!-- Cancelar solo en draft o confirmed -->
-            <xpath expr="//button[@name='action_cancel']" position="attributes">
-            <attribute name="modifiers">{'invisible': [['state','not in',['draft','confirmed']]]}</attribute>
-            </xpath>
-            <!-- Grupo de late_reason solo en rented -->
-            <xpath expr="//group[field[@name='late_reason']]" position="attributes">
-            <attribute name="modifiers">{'invisible': [['state','!=','rented']]}</attribute>
-            </xpath>
-        </field>
-    </record>
 
        <!-- Vista calendario para rental.booking -->
     <record id="rental_booking_calendar_view" model="ir.ui.view">

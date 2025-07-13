@@ -38,6 +38,12 @@ class FleetVehicle(models.Model):
         "product.product", string="Producto de venta", readonly=True, ondelete="restrict"
     )
 
+    rental_booking_ids = fields.One2many(
+        'rental.booking',
+        'vehicle_id',
+        string="Reservas de Arriendo"
+    )
+
     @api.model
     def create(self, vals):
         vehicle = super().create(vals)

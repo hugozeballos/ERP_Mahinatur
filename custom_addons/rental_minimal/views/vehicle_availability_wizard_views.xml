@@ -1,0 +1,26 @@
+<odoo>
+    <!-- Vista del wizard -->
+    <record id="view_vehicle_availability_wizard_form" model="ir.ui.view">
+        <field name="name">vehicle.availability.wizard.form</field>
+        <field name="model">vehicle.availability.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Buscar Disponibilidad de Autos">
+                <group>
+                    <field name="date"/>
+                </group>
+                <footer>
+                    <button name="action_check_availability" type="object" class="btn-primary" string="Buscar"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción del wizard -->
+    <record id="action_vehicle_availability_wizard" model="ir.actions.act_window">
+        <field name="name">Buscar Disponibilidad</field>
+        <field name="res_model">vehicle.availability.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

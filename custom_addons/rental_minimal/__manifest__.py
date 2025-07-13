@@ -13,6 +13,7 @@
         "views/fleet_vehicle_views.xml",
         "views/rental_booking_views.xml",
         "views/rental_return_wizard.xml",
+        'views/vehicle_availability_wizard_views.xml',
         'views/sale_order_view.xml',
         'views/product_template_views.xml',
     ],
