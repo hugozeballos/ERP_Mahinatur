@@ -16,6 +16,7 @@ class VehicleAvailabilityWizard(models.TransientModel):
 
         available_vehicles = vehicles.filtered(lambda v: all(
             booking.state == 'cancelled' or
+            booking.state == 'returned' or
             not (
                 booking.date_start.date() <= date_only <= booking.date_end.date()
             )
