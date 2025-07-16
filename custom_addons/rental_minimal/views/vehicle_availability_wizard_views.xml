@@ -6,7 +6,8 @@
         <field name="arch" type="xml">
             <form string="Buscar Disponibilidad de Autos">
                 <group>
-                    <field name="date"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
                 </group>
                 <footer>
                     <button name="action_check_availability" type="object" class="btn-primary" string="Buscar"/>
