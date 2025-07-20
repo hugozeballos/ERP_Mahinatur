@@ -90,3 +90,8 @@ class FleetVehicle(models.Model):
             'context': {'default_vehicle_id': self.id},
         }
         
+
+     # rediririge a la accion que crea la orden de venta   
+    @api.model
+    def action_add_to_sale_order(self):
+        return self.env['sale.order.line'].create_from_vehicle_action(self)

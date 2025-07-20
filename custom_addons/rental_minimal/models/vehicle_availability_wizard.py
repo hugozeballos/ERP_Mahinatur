@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, time
 from odoo.exceptions import ValidationError
 
 #Modelo para chekear disponibilidad de vehiculos
@@ -17,6 +17,9 @@ class VehicleAvailabilityWizard(models.TransientModel):
 
         if end_date < start_date:
             raise ValidationError("La fecha de término debe ser igual o posterior a la fecha de inicio.")
+        
+        dt_start = datetime.combine(self.start_date, time(9, 0))
+        dt_end = datetime.combine(self.end_date, time(9, 0))
 
         vehicles = self.env['fleet.vehicle'].search([])
 
@@ -33,6 +36,10 @@ class VehicleAvailabilityWizard(models.TransientModel):
             'res_model': 'fleet.vehicle',
             'view_mode': 'tree,form',
             'domain': [('id', 'in', available_vehicles.ids)],
-            'context': dict(self.env.context),
+            'context': {
+                'default_rental_start_date': dt_start.strftime('%Y-%m-%d %H:%M:%S'),
+                'default_rental_end_date': dt_end.strftime('%Y-%m-%d %H:%M:%S'),
+                'default_sale_order_id': self.env.context.get('active_id'),
+            },
             'target': 'new',
         }

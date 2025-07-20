@@ -31,3 +31,39 @@ class SaleOrderLine(models.Model):
                 delta = line.rental_end_date - line.rental_start_date
                 days = max(int(delta.days) + (1 if delta.seconds else 0), 1)
                 line.product_uom_qty = days
+
+
+    @api.model
+    def create_from_vehicle_action(self, vehicles):
+        sale_order = self.env['sale.order'].browse(self.env.context.get('active_id'))
+        if not sale_order:
+            return
+
+        for vehicle in vehicles:
+            product = vehicle.rental_product_id
+            if not product:
+                continue
+
+            start = self.env.context.get('default_rental_start_date')
+            end = self.env.context.get('default_rental_end_date')
+
+            # evitar duplicados
+            existing = sale_order.order_line.filtered(
+                lambda l: l.product_id == product and l.rental_start_date == start and l.rental_end_date == end)
+            if existing:
+                continue
+
+            self.create({
+                'order_id': sale_order.id,
+                'product_id': product.id,
+                'rental_start_date': start,
+                'rental_end_date': end,
+            })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'res_id': sale_order.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
