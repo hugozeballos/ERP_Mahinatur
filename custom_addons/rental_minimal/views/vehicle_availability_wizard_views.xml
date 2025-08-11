@@ -17,6 +17,30 @@
         </field>
     </record>
 
+    <record id="view_vehicle_availability_tree" model="ir.ui.view">
+        <field name="name">fleet.vehicle.tree.availability</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="license_plate"/>
+                <field name="model_id"/>
+                <field name="rental_product_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_add_vehicle_to_sale_order" model="ir.actions.server">
+        <field name="name">Agregar Vehículo a Orden</field>
+        <field name="model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_view_types">tree</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = env['sale.order.line'].create_from_vehicle_action(records)
+        </field>
+    </record>
+
+
     <!-- Acción del wizard -->
     <record id="action_vehicle_availability_wizard" model="ir.actions.act_window">
         <field name="name">Buscar Disponibilidad</field>

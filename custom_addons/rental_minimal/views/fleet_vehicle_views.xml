@@ -34,4 +34,15 @@
             </kanban>
         </field>
     </record>
+
+    <record id="action_add_vehicle_to_sale_order" model="ir.actions.server">
+        <field name="name">Agregar a Orden de Venta</field>
+        <field name="model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_view_types">tree</field>
+        <field name="code">
+            action = env['sale.order.line'].create_from_vehicle_action(records)
+        </field>
+    </record>
 </odoo>
