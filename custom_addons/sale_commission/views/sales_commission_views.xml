@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_sales_commission_tree" model="ir.ui.view">
+    <field name="name">sales.commission.tree</field>
+    <field name="model">sales.commission</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="user_id"/>
+        <field name="sale_order_id"/>
+        <field name="commission_rate"/>
+        <field name="amount"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_sales_commission_form" model="ir.ui.view">
+    <field name="name">sales.commission.form</field>
+    <field name="model">sales.commission</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="user_id"/>
+          <field name="sale_order_id"/>
+          <field name="commission_rate"/>
+          <field name="amount"/>
+          <field name="state"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+    <record id="action_sales_commission" model="ir.actions.act_window">
+    <field name="name">Comisiones</field>
+    <field name="res_model">sales.commission</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p>Registros de comisión generados desde órdenes de venta.</p>
+    </field>
+  </record>
+
+  <menuitem id="menu_sales_commission_root" name="Comisiones" sequence="10"/>
+  <menuitem id="menu_sales_commission" name="Comisiones de Venta"
+            parent="menu_sales_commission_root" action="action_sales_commission"/>
+</odoo>

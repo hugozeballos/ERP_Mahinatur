@@ -1,0 +1,57 @@
+<odoo>
+  <!-- Heredamos el cuerpo del PDF de ventas -->
+  <template id="report_saleorder_document_inherit_group_mgmt"
+            inherit_id="sale.report_saleorder_document">
+
+    <!-- (1) AÑADIR un banner propio arriba del reporte -->
+    <!-- Lo insertamos después del título principal -->
+    <xpath expr="//div[hasclass('page')]/h2" position="after">
+      <!-- Imagen estática servida por tu módulo -->
+      <div style="margin: 10px 0 20px 0; text-align:center;">
+        <img t-att-src="'/group_management/static/src/img/banner_quote.png'"
+             style="max-width: 100%; height:auto;"/>
+      </div>
+    </xpath>
+
+    <!-- (2) MOSTRAR la descripción de la línea respetando saltos de línea -->
+    <!-- Reemplaza la celda de descripción de cada línea -->
+    <xpath expr="//table[contains(@class,'table') or contains(@class,'o_main_table')]//tbody//tr/td[1]"
+           position="replace">
+      <td>
+        <span style="white-space: pre-wrap;">
+          <t t-esc="line.name"/>
+        </span>
+      </td>
+    </xpath>
+
+    <!-- (3) EJEMPLO: QUITAR una imagen de producto si existiera -->
+    <!-- Si tu plantilla tuviera columna de imagen, elimínala: -->
+    <!--
+    <xpath expr="//table//thead//th[contains(., 'Image')]" position="replace"/>
+    <xpath expr="//table//tbody//tr/td[hasclass('o_line_image')]" position="replace">
+      <td/>
+    </xpath>
+    -->
+
+  </template>
+
+  <!-- (4) (Opcional) Personalizar el layout externo para quitar logos o pies -->
+  <!-- Descomenta si quieres cambiar el header/pie global -->
+  <!--
+  <template id="external_layout_inherit_group_mgmt"
+            inherit_id="web.external_layout_standard">
+    <xpath expr="//div[@id='header']" position="replace">
+      <div id="header">
+        <div style="text-align:center; font-weight:600; font-size:14px;">
+          Cotización / Sales Order
+        </div>
+      </div>
+    </xpath>
+    <xpath expr="//div[@id='footer']" position="replace">
+      <div id="footer" style="text-align:center; font-size:10px;">
+        © Tu Empresa — www.tu-dominio.com — +56 9 1234 5678
+      </div>
+    </xpath>
+  </template>
+  -->
+</odoo>

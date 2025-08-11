@@ -6,18 +6,25 @@
             <field name="arch" type="xml">
             <form string="Group">
                 <header>
-                <button name="action_confirm_group" type="object"
-                        string="Confirmar Grupo" invisible="state!='draft'"/>
-                <field name="state" readonly="1"/>
+                    <button name="action_confirm_group" type="object"
+                            string="Confirmar Grupo" invisible="state!='draft'"/>
+                    <button name="action_apply_changes"
+                            type="object"
+                            string="Aplicar cambios"
+                            class="btn-primary"
+                            invisible="state!='confirmed'"/>
+                    <field name="state" readonly="1"/>
                 </header>
                 <sheet>
                 <group>
+                    <field name="has_pending_changes" invisible="1" readonly="1"/>
                     <field name="name"/>
-                    <field name="date"/>
+                    <field name="date_start"/>
                     <field name="partner_id"/>
                     <field name="group_size"/>
                     <field name="language_id"/>
-
+                    <field name="bundle_id"/> 
+                    <field name="price_per_person_effective" readonly="1"/>
                 </group>
                 <notebook>
                     <page string="Activities">
@@ -44,7 +51,7 @@
             <field name="arch" type="xml">
             <tree string="Groups">
                 <field name="name"/>
-                <field name="date"/>
+                <field name="date_start"/>
                 <field name="partner_id"/>
                 <field name="state"/>
             </tree>

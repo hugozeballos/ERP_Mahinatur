@@ -12,6 +12,8 @@
         'views/group_management_views.xml',
         'views/activity_template_views.xml',
         'views/tour_minimal_inherit_views.xml',
+        'views/activity_bundle_views.xml',
+        'report/report_saleorder_inherit.xml',
     ],
     'installable': True,
     'application': True,

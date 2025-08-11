@@ -2,3 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_group_management,Access Group Management,group_management.model_group_management,base.group_user,1,1,1,1
 access_group_activity_line,Access Group Activity Line,group_management.model_group_activity_line,base.group_user,1,1,1,1
 access_activity_template,Access Activity Template,group_management.model_group_activity_template,base.group_user,1,1,1,1
+access_group_activity_bundle_user,access_group_activity_bundle_user,model_group_activity_bundle,base.group_user,1,1,1,1
+access_group_activity_bundle_line_user,access_group_activity_bundle_line_user,model_group_activity_bundle_line,base.group_user,1,1,1,1
+access_group_activity_bundle_tier_user,access_group_activity_bundle_tier_user,model_group_activity_bundle_tier,base.group_user,1,1,1,1
