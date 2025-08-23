@@ -1,16 +1,42 @@
 <odoo>
-  <record id="view_sale_order_form_inherit_config_tour" model="ir.ui.view">
-      <field name="name">sale.order.form.inherit.config.tour</field>
-      <field name="model">sale.order</field>
-      <field name="inherit_id" ref="sale.view_order_form"/> <!-- importante -->
-      <field name="arch" type="xml">
-          <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
-              <button name="open_configure_tour_wizard"
-                      string="Configurar Tour"
-                      type="object"
-                      class="btn btn-secondary"
-                      context="{'active_id': id}"/>
-          </xpath>
-      </field>
+  <record id="view_order_form_expand_packages" model="ir.ui.view">
+    <field name="name">sale.order.form.expand.packages</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="action_expand_packages"
+                type="object"
+                string="Desglosar paquete"
+                class="btn-secondary"
+                invisible="state != 'draft'"/>
+      </xpath>
+    </field>
+  </record>
+   <!-- Añadir service_date en el árbol y formulario del one2many order_line -->
+  <record id="view_order_form_lines_service_date" model="ir.ui.view">
+    <field name="name">sale.order.form.lines.service.date</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+
+      <!-- 1) Columna en el árbol de líneas: insertar DESPUÉS de 'name' -->
+      <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+        <field name="service_date"
+               optional="show"
+               attrs="{'invisible': ['|', ('is_package_component','=',False), ('component_service_kind','!=','sib')]}"/>
+      </xpath>
+
+      <!-- 2) Campo en el formulario de la línea: insertar DESPUÉS de 'product_id' -->
+      <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+        <field name="service_date"
+               attrs="{
+                 'readonly': [('is_package_component','=',False)],
+                 'required': [('is_package_component','=',True), ('component_service_kind','=','sib')]
+               }"/>
+      </xpath>
+      
+
+    </field>
   </record>
 </odoo>

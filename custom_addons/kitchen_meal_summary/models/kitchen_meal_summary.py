@@ -20,29 +20,34 @@ class KitchenMealSummary(models.Model):
     store=True
     )
 
-    normal_count = fields.Integer(string='Normal', compute='_compute_tipo_almuerzo_counts', store=True)
-    vegetariano_count = fields.Integer(string='Vegetariano', compute='_compute_tipo_almuerzo_counts', store=True)
-    pescado_count = fields.Integer(string='Pescado', compute='_compute_tipo_almuerzo_counts', store=True)
+
+    normal_count = fields.Integer(string='lunch_normal', compute='_compute_tipo_almuerzo_counts', store=True)
+    vegetariano_count = fields.Integer(string='lunch_veg', compute='_compute_tipo_almuerzo_counts', store=True)
+    pescado_count = fields.Integer(string='lunch_extra', compute='_compute_tipo_almuerzo_counts', store=True)
+    Restorant_count = fields.Integer(string='menu_rest', compute='_compute_tipo_almuerzo_counts', store=True)
     sin_tipo_count = fields.Integer(string='Sin Tipo', compute='_compute_tipo_almuerzo_counts', store=True)
 
     @api.depends('participant_ids.tipo_almuerzo', 'participant_ids.almuerzo')
     def _compute_tipo_almuerzo_counts(self):
         for record in self:
-            normal = vegetariano = pescado = sin_tipo = 0
+            normal = vegetariano = pescado = restorant = sin_tipo = 0
             for p in record.participant_ids:
                 if not p.almuerzo:
                     continue
-                if p.tipo_almuerzo == 'normal':
+                if p.tipo_almuerzo == 'lunch_normal':
                     normal += 1
-                elif p.tipo_almuerzo == 'vegetariano':
+                elif p.tipo_almuerzo == 'lunch_veg':
                     vegetariano += 1
-                elif p.tipo_almuerzo == 'pescado':
+                elif p.tipo_almuerzo == 'lunch_extra':
                     pescado += 1
+                elif p.tipo_almuerzo == 'menu_rest':
+                    restorant += 1
                 else:
                     sin_tipo += 1
             record.normal_count = normal
             record.vegetariano_count = vegetariano
             record.pescado_count = pescado
+            record.Restorant_count = restorant
             record.sin_tipo_count = sin_tipo
     
     

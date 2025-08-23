@@ -25,7 +25,8 @@ class TourMinimal(models.Model):
     total_cost = fields.Float(string='Costo Total', compute='_compute_total_cost', store=True)
     available_seats = fields.Integer(string='Cupos Disponibles', compute='_compute_available_seats', store=True)
     sale_order_ids = fields.One2many('sale.order', 'tour_id', string='Ventas Asociadas')
-
+    product_id = fields.Many2one('product.product', string='Producto del Tour', help='Producto (Half Day, Full Day, etc.) para emparejar ventas SIB.')
+    tour_type_id = fields.Many2one('tour.type', string='Tipo de tour', index=True)
 
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -43,11 +44,17 @@ class TourMinimal(models.Model):
         help="Idioma principal en el que se impartirá este tour"
     )
 
-    tour_type = fields.Selection([
-        ('regular', 'Regular'),
-        ('private', 'Privado'),
-    ], string="Tipo de tour", default='regular',
-       help="Indica si es un tour regular (grupo) o privado")
+    service_kind = fields.Selection([
+        ('sib', 'SIB (regular con cupos)'),
+        ('private', 'Privado (crear salida)'),
+        ('external', 'Externo (actividad sin tour)')
+    ], string='Tipo de servicio', help="SIB o Privado según origen del producto.")
+
+    provider_id = fields.Many2one(
+        'res.partner',
+        string='Proveedor',
+        help="Proveedor responsable del tour, solo aplicable a tours externos."
+    )
 
     include_park_ticket = fields.Boolean(
         string="Incluye ticket de parque",

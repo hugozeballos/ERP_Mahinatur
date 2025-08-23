@@ -7,9 +7,10 @@ class TourParticipant(models.Model):
     name = fields.Char(string='Nombre del Participante', required=True)
     almuerzo = fields.Boolean(string='¿Incluir almuerzo?')
     tipo_almuerzo = fields.Selection([
-        ('normal', 'Normal'),
-        ('vegetariano', 'Vegetariano'),
-        ('pescado', 'Pescado (costo extra)'),
+        ('lunch_normal', 'Box Lunch normal'),
+        ('lunch_veg',    'Box Lunch vegetariano'),
+        ('lunch_extra',  'Box Lunch extra'),
+        ('menu_rest',    'Almuerzo/Cena menú + TRF'),
     ], string='Tipo de Almuerzo')
 
     tour_id = fields.Many2one('tour.minimal', string='Tour', ondelete='cascade')

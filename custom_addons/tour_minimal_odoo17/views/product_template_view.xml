@@ -11,8 +11,11 @@
                     <field name="tour_id" modifiers='{"invisible": [["is_tour_ticket", "=", false]]}'/>
                     <field name="available_in_pos"/>
                     <field name="pos_categ_id"/>
-                              <field name="is_external" string="Producto Externo" help="Marca si el producto proviene de un proveedor externo"/>
-                </group>
+                    <field name="service_kind"/>
+                    <field name="provider_id" invisible="service_kind != 'external'"/>
+                    <field name="language_id"/>
+                    <field name="is_tour_addon"/>
+                    <field name="addon_code" modifiers='{"invisible": [("is_tour_addon","=",False)]}' help="Este producto se usará como add-on (ej. almuerzo) para asignarlo a participantes del tour."/>                </group>
             </xpath>
         </field>
     </record>

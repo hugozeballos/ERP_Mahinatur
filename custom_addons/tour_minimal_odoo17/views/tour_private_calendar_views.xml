@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Vista calendario dedicada (usa date_start) -->
+  <record id="view_tour_private_calendar" model="ir.ui.view">
+    <field name="name">tour.minimal.calendar.private</field>
+    <field name="model">tour.minimal</field>
+    <field name="arch" type="xml">
+      <calendar string="Privados" date_start="date_start">
+        <field name="name"/>
+        <field name="tour_type_id"/>
+      </calendar>
+    </field>
+  </record>
+
+  <!-- Acción que muestra SOLO privados -->
+  <record id="action_tour_private_calendar" model="ir.actions.act_window">
+    <field name="name">Privados</field>
+    <field name="res_model">tour.minimal</field>
+    <field name="view_mode">calendar,tree,form</field>
+    <field name="domain">[('service_kind', '=', 'private')]</field>
+    <field name="context">{}</field>
+    <field name="view_id" ref="view_tour_private_calendar"/>
+  </record>
+
+  <!-- Menú: ubícalo bajo tu menú de Tours -->
+  <!-- Sustituye 'menu_tour_root' por el id real de tu menú padre de Tours -->
+  <menuitem id="menu_tour_private_calendar"
+            name="Privados"
+            parent="menu_tour_minimal_root"
+            action="action_tour_private_calendar"
+            sequence="35"/>
+</odoo>

@@ -6,6 +6,8 @@ access_tour_participant_wizard_line,tour.participant.wizard.line,model_tour_part
 access_tour_minimal_admin,tour.minimal.admin,model_tour_minimal,,1,1,1,1
 access_tour_participant_admin,tour.participant.admin,model_tour_participant,,1,1,1,1
 access_tour_selection_wizard_admin,tour.selection.wizard.admin,model_tour_selection_wizard,,1,1,1,0
-access_tour_selection_external_wizard_user,tour.selection.external.wizard,model_tour_selection_external_wizard,base.group_user,1,1,1,0
-access_tour_selection_external_wizard_user,tour.selection.external.wizard,model_tour_selection_external_wizard,base.group_user,1,1,1,0
 access_tour_external_reservation_user,tour.external.reservation,model_tour_external_reservation,base.group_user,1,1,1,0
+access_tour_package_line_user,Tour Package Line User,model_tour_package_line,sales_team.group_sale_salesman,1,1,1,0
+access_tour_package_line_manager,Tour Package Line Manager,model_tour_package_line,sales_team.group_sale_manager,1,1,1,1
+access_tour_type_manager,Tour Type Manager,model_tour_type,sales_team.group_sale_manager,1,1,1,1
+access_tour_type_user,Tour Type User,model_tour_type,sales_team.group_sale_salesman,1,0,0,0
