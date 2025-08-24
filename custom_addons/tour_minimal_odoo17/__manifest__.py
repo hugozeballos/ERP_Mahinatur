@@ -3,7 +3,7 @@
     "version": "1.0",
     "summary": "Módulo mínimo para Odoo 17",
     "author": "ChatGPT",
-    "depends": ["base",'hr_contract',"hr","fleet",'sale','hr_expense'],
+    "depends": ["base","product",'hr_contract',"hr","fleet","sale","hr_expense","bi_hr_payroll"],
     'data': [
         #'security/groups.xml',
         'security/ir.model.access.csv',
