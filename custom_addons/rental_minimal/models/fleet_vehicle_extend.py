@@ -72,7 +72,6 @@ class FleetVehicle(models.Model):
                         "sale_ok": True,
                         "purchase_ok": False,
                         "is_tour_addon": False,
-                        "taxes_id": [(6, 0, self.env.company.sale_tax_ids.ids)],
                     }
                 )
                 veh.rental_product_id = tmpl.product_variant_id.id
