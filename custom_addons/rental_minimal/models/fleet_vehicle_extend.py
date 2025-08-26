@@ -71,6 +71,8 @@ class FleetVehicle(models.Model):
                         "list_price": veh.price_per_day or 0.0,
                         "sale_ok": True,
                         "purchase_ok": False,
+                        "is_tour_addon": False,
+                        "taxes_id": [(6, 0, self.env.company.sale_tax_ids.ids)],
                     }
                 )
                 veh.rental_product_id = tmpl.product_variant_id.id
