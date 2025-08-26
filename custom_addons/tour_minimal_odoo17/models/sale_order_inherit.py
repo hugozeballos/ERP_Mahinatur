@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
             prv_lines = order.order_line.filtered(lambda l: not l.display_type and getattr(l.product_id.product_tmpl_id, 'is_tour_ticket', False) and l.service_kind == 'private')
             prv_lines._ensure_private_tour_created()
 
-            external_lines = order.order_line.filtered(lambda l: not l.display_type and getattr(l.product_id.product_tmpl_id, 'is_tour_ticket', False) and l.service_kind in ('private', 'external'))
+            external_lines = order.order_line.filtered(lambda l: not l.display_type and getattr(l.product_id.product_tmpl_id, 'is_tour_ticket', False) and l.service_kind in ('external'))
             external_lines._ensure_activity_tours_created()
 
             # Add-ons (almuerzos) siguen aplicando solo a SIB (por fecha)

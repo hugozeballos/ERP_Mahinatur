@@ -129,6 +129,11 @@ class SaleOrderLineInherit(models.Model):
     # ====== Fase 3 (SIB): asignar por FECHA (línea) + TIPO DE TOUR ======
     def _assign_sib_to_existing_tour_by_date_and_type(self):
         for line in self:
+            tmpl = line.product_id.product_tmpl_id
+            if getattr(tmpl, 'is_tour_package', False):
+                # No pedir fecha/tipo para el paquete (la línea padre del pack)
+                continue
+
             if not (line.service_kind == 'sib'):
                 continue
 
@@ -199,6 +204,9 @@ class SaleOrderLineInherit(models.Model):
         Participant = self.env['tour.participant']
 
         for line in self:
+            if line.service_kind == 'external':
+                continue
+
             tmpl = line.product_id.product_tmpl_id
 
             if not (getattr(tmpl, 'is_tour_ticket', False)
@@ -219,7 +227,7 @@ class SaleOrderLineInherit(models.Model):
             date_start_dt = datetime.combine(line.service_date, time(hour=9, minute=0))
 
             vals = {
-                'name': "%s - %s" % (line.order_id.partner_id.display_name or 'Privado', tour_type.name),
+                'name': "%s - %s" % (tour_type.name, line.order_id.partner_id.display_name or 'Privado'),
                 'tour_type_id': tour_type.id,
                 'service_kind': tmpl.service_kind,
                 'date_start': date_start_dt,
@@ -253,6 +261,7 @@ class SaleOrderLineInherit(models.Model):
         Participant = self.env['tour.participant']
 
         for line in self:
+
             tmpl = line.product_id.product_tmpl_id
 
             kind = line.service_kind

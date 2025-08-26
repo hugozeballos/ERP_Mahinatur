@@ -14,4 +14,24 @@
     <field name="code">half_day_pm</field>
     <field name="sequence">30</field>
   </record>
+  <record id="tour_type_tranfer" model="tour.type">
+    <field name="name">Tranfer</field>
+    <field name="code">tranfer</field>
+    <field name="sequence">40</field>
+  </record>
+  <record id="tour_type_amanecer" model="tour.type">
+    <field name="name">Amanecer</field>
+    <field name="code">amanecer</field>
+    <field name="sequence">50</field>
+  </record>
+  <record id="tour_type_atardeccer" model="tour.type">
+    <field name="name">Atardeccer</field>
+    <field name="code">atardecer</field>
+    <field name="sequence">60</field>
+  </record>
+    <record id="tour_type_evento" model="tour.type">
+    <field name="name">Evento</field>
+    <field name="code">evento</field>
+    <field name="sequence">60</field>
+  </record>
 </odoo>

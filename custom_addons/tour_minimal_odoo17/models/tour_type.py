@@ -11,6 +11,10 @@ class TourType(models.Model):
         ('full_day', 'Full Day'),
         ('half_day_am', 'Half Day AM'),
         ('half_day_pm', 'Half Day PM'),
+        ('tranfer', 'Tranfer'),
+        ('amanecer', 'Amanecer'),
+        ('atardecer', 'Atardecer'),
+        ('evento', 'Evento'),
         # agrega otros si los necesitas
     ], required=True, string='Código')
     sequence = fields.Integer(default=10, help='Orden de visualización')
