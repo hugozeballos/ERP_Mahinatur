@@ -24,8 +24,8 @@
     <field name="code">amanecer</field>
     <field name="sequence">50</field>
   </record>
-  <record id="tour_type_atardeccer" model="tour.type">
-    <field name="name">Atardeccer</field>
+  <record id="tour_type_atardecer" model="tour.type">
+    <field name="name">Atardecer</field>
     <field name="code">atardecer</field>
     <field name="sequence">60</field>
   </record>
