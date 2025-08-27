@@ -13,6 +13,30 @@
       </xpath>
     </field>
   </record>
+    <record id="view_order_form_inherit_agency_code" model="ir.ui.view">
+      <field name="name">sale.order.form.inherit.agency.code</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='partner_id']" position="after">
+              <field name="external_agency_code"/>
+          </xpath>
+      </field>
+  </record>
+  <record id="view_order_form_inherit_tour_fields" model="ir.ui.view">
+      <field name="name">sale.order.form.inherit.tour.fields</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='partner_id']" position="after">
+              <field name="check_in"/>
+              <field name="check_out"/>
+              <field name="flight_in"/>
+              <field name="flight_out"/>
+              <field name="hotel"/>
+          </xpath>
+      </field>
+  </record>
    <!-- Añadir service_date en el árbol y formulario del one2many order_line -->
   <record id="view_order_form_lines_service_date" model="ir.ui.view">
     <field name="name">sale.order.form.lines.service.date</field>

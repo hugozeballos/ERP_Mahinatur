@@ -1,0 +1,55 @@
+<odoo>
+    <record id="view_ticket_daily_counter_calendar" model="ir.ui.view">
+        <field name="name">ticket.daily.counter.calendar</field>
+        <field name="model">ticket.daily.counter</field>
+        <field name="arch" type="xml">
+            <calendar string="Tickets por Día" date_start="date">
+                <field name="national_qty"/>
+                <field name="foreigner_qty"/>
+            </calendar>
+        </field>
+    </record>
+    <record id="view_ticket_daily_counter_tree" model="ir.ui.view">
+        <field name="name">ticket.daily.counter.tree</field>
+        <field name="model">ticket.daily.counter</field>
+        <field name="arch" type="xml">
+            <tree string="Tickets por Día">
+                <field name="date"/>
+                <field name="national_qty"/>
+                <field name="foreigner_qty"/>
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_ticket_daily_counter_kanban" model="ir.ui.view">
+        <field name="name">ticket.daily.counter.kanban</field>
+        <field name="model">ticket.daily.counter</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_card">
+                            <strong><field name="date"/></strong><br/>
+                            Nacionales: <field name="national_qty"/><br/>
+                            Extranjeros: <field name="foreigner_qty"/><br/>
+                            Cliente: <field name="partner_id"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <record id="action_ticket_daily_counter" model="ir.actions.act_window">
+        <field name="name">Contador Diario de Tickets</field>
+        <field name="res_model">ticket.daily.counter</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    <menuitem id="menu_ticket_daily_counter"
+              name="Tickets por Día"
+              parent="menu_tour_minimal_root"
+              action="action_ticket_daily_counter"
+              sequence="99"/>
+</odoo>

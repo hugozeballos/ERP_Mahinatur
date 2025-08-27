@@ -10,6 +10,13 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     tour_id = fields.Many2one('tour.minimal', string='Tour Relacionado')
+    external_agency_code = fields.Char(string="Código Agencia Externa")
+    check_in = fields.Date(string='Check-in')
+    check_out = fields.Date(string='Check-out')
+    flight_in = fields.Char(string='Vuelo In')
+    flight_out = fields.Char(string='Vuelo Out')
+    hotel = fields.Char(string='Hotel')
+
 
     def action_expand_packages(self):
         """Botón manual para desglosar paquetes (útil para probar Fase 2 sin confirmar)."""
@@ -18,7 +25,6 @@ class SaleOrder(models.Model):
         return True
     
     def action_confirm(self):
-        # 1) Desglosar paquetes (si hay)
 
         for order in self:
             order.order_line._expand_tour_package()
@@ -29,6 +35,8 @@ class SaleOrder(models.Model):
 
 
         for order in self:
+            #comprueba si hay tickets y actualiza el contador
+            order.order_line._update_ticket_counter()
             # SIB: ahora TODAS las líneas con service_kind == 'sib'
             sib_lines = order.order_line.filtered(lambda l: not l.display_type and getattr(l.product_id.product_tmpl_id, 'is_tour_ticket', False) and l.service_kind == 'sib')
             sib_lines._assign_sib_to_existing_tour_by_date_and_type()
@@ -44,7 +52,27 @@ class SaleOrder(models.Model):
             order._apply_addons_by_date_to_full_day_sib()
 
         return res
+    
+    def action_cancel(self):
+        for order in self:
+            order.order_line._rollback_ticket_counter()
+            # 1. Borrar participantes relacionados
+            self.env['tour.participant'].search([
+                ('sale_order_id', '=', order.id)
+            ]).unlink()
 
+            # 2. Borrar tours (privados o externos) asociados directamente
+            self.env['tour.minimal'].search([
+                ('sale_order_ids', 'in', order.id)
+            ]).unlink()
+
+            # 3. Borrar reservas externas
+            self.env['tour.external.reservation'].search([
+                ('sale_order_id', '=', order.id)
+            ]).unlink()
+
+        return super().action_cancel()
+    
 
         # === NUEVO: aplica almuerzos buscando la línea Full Day SIB por FECHA ===
     def _apply_addons_by_date_to_full_day_sib(self):

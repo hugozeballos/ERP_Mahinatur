@@ -9,3 +9,4 @@ from . import hr_contract_extend
 from . import external_reservation
 from . import product_package
 from . import tour_type
+from . import ticket_daily_counter

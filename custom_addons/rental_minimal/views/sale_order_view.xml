@@ -23,6 +23,7 @@
             </xpath>
         </field>
     </record>
+
     <record id="view_order_form_inherit_rental_availability" model="ir.ui.view">
         <field name="name">sale.order.form.inherit.vehicle.availability</field>
         <field name="model">sale.order</field>

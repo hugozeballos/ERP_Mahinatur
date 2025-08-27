@@ -306,5 +306,45 @@ class SaleOrderLineInherit(models.Model):
                 } for i in range(qty)])
 
     
-    
-    
+    def _update_ticket_counter(self):
+        for line in self:
+            product = line.product_id.product_tmpl_id
+            if not product.categ_id or 'ticket' not in product.categ_id.name.lower():
+                continue
+
+            ticket_date = line.service_date
+            if not ticket_date:
+                continue
+
+            counter = self.env['ticket.daily.counter'].search([('date', '=', ticket_date)], limit=1)
+            if not counter:
+                counter = self.env['ticket.daily.counter'].create({'date': ticket_date})
+
+            qty = int(line.product_uom_qty)
+
+            if 'nac' in product.name.lower():
+                counter.write({'national_qty': counter.national_qty + qty})
+            else:
+                counter.write({'foreigner_qty': counter.foreigner_qty + qty})
+
+
+    def _rollback_ticket_counter(self):
+        for line in self:
+            product = line.product_id.product_tmpl_id
+            if not product.categ_id or 'ticket' not in product.categ_id.name.lower():
+                continue
+
+            ticket_date = line.service_date
+            if not ticket_date:
+                continue
+
+            counter = self.env['ticket.daily.counter'].search([('date', '=', ticket_date)], limit=1)
+            if not counter:
+                continue
+
+            qty = int(line.product_uom_qty)
+
+            if 'nac' in product.name.lower():
+                counter.write({'national_qty': max(0, counter.national_qty - qty)})
+            else:
+                counter.write({'foreigner_qty': max(0, counter.foreigner_qty - qty)})

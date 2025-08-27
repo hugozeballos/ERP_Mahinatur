@@ -8,3 +8,4 @@ class ExternalReservation(models.Model):
     product_id          = fields.Many2one('product.product', string='Producto', required=True)
     sale_order_line_id  = fields.Many2one('sale.order.line', string='Línea de pedido')
     reservation_date    = fields.Date(string='Fecha de Reserva', required=True)
+    sale_order_id = fields.Many2one('sale.order', string='Orden de Venta', )
