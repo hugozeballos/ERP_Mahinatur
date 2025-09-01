@@ -1,4 +1,4 @@
-from odoo import models, fields, _ 
+from odoo import models, fields, _ ,api
 from odoo.exceptions import UserError
 import logging, inspect, os
 from datetime import datetime,  time
@@ -17,6 +17,8 @@ class SaleOrder(models.Model):
     flight_out = fields.Char(string='Vuelo Out')
     hotel = fields.Char(string='Hotel')
 
+    # Entero, no m2m: cuántos líderes aplican
+    tour_leader_count = fields.Integer(string="Tour Líderes", default=0)
 
     def action_expand_packages(self):
         """Botón manual para desglosar paquetes (útil para probar Fase 2 sin confirmar)."""
@@ -133,4 +135,174 @@ class SaleOrder(models.Model):
                     p.tipo_almuerzo = al.addon_code
                     p.almuerzo = True
 
+# ---------------------------
+    # Helpers para descuento Tour Líder
+    # ---------------------------
+    def _get_discount_product(self):
+        """Obtiene el product.product del template XMLID product_tour_leader_discount."""
+        # product.template -> product.product
+        tmpl = self.env.ref('tour_minimal_odoo17.product_tour_leader_discount', raise_if_not_found=False)
+        if not tmpl:
+            raise UserError(_("No se encontró el producto 'Descuento Tour Líder' "
+                              "(XMLID tour_minimal_odoo17.product_tour_leader_discount)."))
+        # Usar la variante principal
+        return tmpl.product_variant_id
 
+    def _compute_tour_leader_discount_amount(self):
+        """Calcula el monto total a descontar (positivo) sumando todas las líneas paquete.
+        Regla especial: si la lista de precios contiene 'Joy Travel' en el nombre,
+        el descuento es SIEMPRE 1 persona (no 0.5), manteniendo el mínimo de 5 pax.
+        """
+        self.ensure_one()
+        order = self
+        tlc = max(0, order.tour_leader_count or 0)
+        if not tlc:
+            return 0.0
+
+        total_disc = 0.0
+        currency = order.currency_id or self.env.company.currency_id
+
+        # Detectar lista de precios "Joy Travel" (insensible a mayúsculas)
+        is_joy_travel = bool(order.pricelist_id and 'joy travel' in (order.pricelist_id.name or '').lower())
+
+        # (opcional) si prefieres que aplique sin mínimo para Joy Travel, elimina el check qty<5 más abajo.
+
+        # Obtener (si existe) el producto de descuento para excluir su línea del cálculo
+        discount_product = None
+        try:
+            discount_product = self._get_discount_product()
+        except Exception:
+            pass
+
+        for line in order.order_line:
+            # Excluir la línea de descuento si ya existe
+            if discount_product and line.product_id == discount_product:
+                continue
+
+            # Solo líneas paquete
+            tmpl = line.product_id and line.product_id.product_tmpl_id
+            if not (tmpl and getattr(tmpl, 'is_tour_package', False)):
+                continue
+
+            qty = int(line.product_uom_qty or 0)
+            
+            #####SI QUISIERA APLICAR A PARTIR DE % EL DESCUENTO A JOY TRAVEL DEBO DESCOMENTAR #####################
+            
+            #if qty < 5:
+                # Mantengo el mínimo de 5 pax también para Joy Travel (si quieres que no aplique mínimo, quita esta línea)
+            #    continue
+
+            # ---- REGLA DE PERSONAS GRATIS ----
+            if is_joy_travel:
+                free_units = 1.0              # siempre 1 para Joy Travel
+            else:
+                free_units = 0.5 if 5 <= qty <= 9 else 1.0  # lógica original para otras listas
+
+            # Precio unitario efectivo (post descuento de línea, pre impuestos)
+            unit_price_effective = (line.price_unit or 0.0) * (1.0 - (line.discount or 0.0) / 100.0)
+
+            line_disc = unit_price_effective * free_units * tlc
+
+            # Seguridad: no exceder el subtotal sin impuestos de la línea
+            max_line_disc = line.price_subtotal or 0.0
+            if max_line_disc > 0:
+                line_disc = min(line_disc, max_line_disc)
+            else:
+                line_disc = 0.0
+
+            total_disc += currency.round(line_disc)
+
+        return currency.round(total_disc)
+
+    def _ensure_tour_leader_discount_line(self):
+        """Crea/actualiza/elimina la ÚNICA línea 'Descuento Tour Líder' al final del pedido.
+           - Sin impuestos
+           - Siempre qty=1 y price_unit NEGATIVO por el monto total a descontar
+           - Idempotente
+        """
+        for order in self:
+            product = order._get_discount_product()  # product.product de tu XML
+            # Calcular monto positivo a descontar
+            amount = order._compute_tour_leader_discount_amount()
+
+            # Filtrar líneas de descuento existentes por PRODUCTO (no por flag)
+            disc_lines = order.order_line.filtered(lambda l: l.product_id == product)
+
+            if not order.id:
+                # ===== CASO A: Orden sin guardar (onchange) =====
+                # Borrar en memoria cualquier línea de descuento previa
+                if disc_lines:
+                    order.order_line -= disc_lines
+
+                if amount <= 0:
+                    # No corresponde mostrar línea
+                    continue
+
+                # Crear UNA línea en memoria, al final
+                newline_vals = {
+                    'name': _("Descuento Tour Líder"),
+                    'product_id': product.id,
+                    'product_uom_qty': 1.0,
+                    'product_uom': product.uom_id.id,  # asegurar UoM
+                    'price_unit': -amount,              # negativo = descuento
+                    'discount': 0.0,
+                    'tax_id': False,                    # sin impuestos
+                    'display_type': False,
+                    # Nota: 'order_id' NO se pone en new()
+                }
+                newline = self.env['sale.order.line'].new(newline_vals)
+                # Append al final
+                order.order_line += newline
+
+            else:
+                # ===== CASO B: Orden guardada (con id) =====
+                # Si no hay monto, eliminar línea si existe
+                if amount <= 0:
+                    if disc_lines:
+                        disc_lines.unlink()
+                    continue
+
+                # Preparar vals persistentes
+                vals = {
+                    'order_id': order.id,
+                    'product_id': product.id,
+                    'name': _("Descuento Tour Líder"),
+                    'product_uom_qty': 1.0,
+                    'product_uom': product.uom_id.id,
+                    'price_unit': -amount,
+                    'discount': 0.0,
+                    'tax_id': [(5, 0, 0)],  # sin impuestos
+                    # Ponerla al final con una secuencia mayor
+                    'sequence': (max(order.order_line.mapped('sequence') or [10]) + 10),
+                    'display_type': False,
+                }
+
+                if disc_lines:
+                    # Actualizar la primera y eliminar duplicadas si las hubiera
+                    main = disc_lines[0]
+                    main.write(vals)
+                    (disc_lines - main).unlink()
+                else:
+                    self.env['sale.order.line'].create(vals)
+
+    # ---------------------------
+    # Enganches para recalcular
+    # ---------------------------
+    @api.onchange('pricelist_id','tour_leader_count', 'order_line')
+    def _onchange_tour_leader_discount_line(self):
+        # Nota: onchange en líneas puede disparar varias veces; mantenerlo idempotente
+        for order in self:
+            # Asegurarse de que el precio de líneas está ya calculado por Odoo antes de ajustar
+            order._ensure_tour_leader_discount_line()
+
+    def write(self, vals):
+        res = super().write(vals)
+        # Recalcular si cambian campos relevantes
+        fields_touch = {'order_line', 'tour_leader_count', 'pricelist_id'}
+        if fields_touch.intersection(vals.keys()):
+            self._ensure_tour_leader_discount_line()
+        return res
+
+    def action_update_tour_leader_discount(self):
+        """Acción manual opcional (botón) por si quieres re-aplicar bajo demanda."""
+        self._ensure_tour_leader_discount_line()

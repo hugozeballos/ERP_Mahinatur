@@ -13,15 +13,16 @@
       </xpath>
     </field>
   </record>
-    <record id="view_order_form_inherit_agency_code" model="ir.ui.view">
-      <field name="name">sale.order.form.inherit.agency.code</field>
-      <field name="model">sale.order</field>
-      <field name="inherit_id" ref="sale.view_order_form"/>
-      <field name="arch" type="xml">
-          <xpath expr="//field[@name='partner_id']" position="after">
-              <field name="external_agency_code"/>
-          </xpath>
-      </field>
+  <record id="view_order_form_inherit_agency_code" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.agency.code</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position="after">
+            <field name="external_agency_code"/>
+            <field name="tour_leader_count"/>
+        </xpath>
+    </field>
   </record>
   <record id="view_order_form_inherit_tour_fields" model="ir.ui.view">
       <field name="name">sale.order.form.inherit.tour.fields</field>
@@ -59,8 +60,6 @@
                  'required': [('is_package_component','=',True), ('component_service_kind','=','sib')]
                }"/>
       </xpath>
-      
-
     </field>
   </record>
 </odoo>

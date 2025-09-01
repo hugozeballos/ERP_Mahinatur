@@ -1,0 +1,9 @@
+<odoo>
+  <template id="report_saleorder_document_indent_zero_price" inherit_id="sale.report_saleorder_document">
+    <xpath expr="//tbody/tr" position="attributes">
+      <attribute name="t-att-class">
+        "'indented-line' if line.price_unit == 0 else ''"
+      </attribute>
+    </xpath>
+  </template>
+</odoo>

@@ -23,7 +23,14 @@
         'data/tour_type_data.xml',
         'views/tour_private_calendar_views.xml',
         'views/ticket_daily_counter_views.xml',
+        'report/sale_order_report_inherit.xml',
+        'data/product_tour_leader_discount.xml',
     ],
+    'assets': {
+    'web.report_assets_common': [
+        'tour_minimal_odoo17/static/src/css/report_indent.css',
+        ],
+    },
     "images": ['static/description/icon.png'],
     "installable": True,
     "application": True,
