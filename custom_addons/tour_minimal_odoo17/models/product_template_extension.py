@@ -10,7 +10,7 @@ class ProductTemplate(models.Model):
         string="Cupo de Tour Privado",
         help="Si está activo, al vender este producto se tratará como reserva privada."
     )
-    is_tour_addon = fields.Boolean(string='Es add-on de tour', required=True)
+    is_tour_addon = fields.Boolean(string='Es add-on de tour', required=False, default=False)
     addon_code = fields.Selection([
         ('lunch_normal', 'Box Lunch normal'),
         ('lunch_veg',    'Box Lunch vegetariano'),

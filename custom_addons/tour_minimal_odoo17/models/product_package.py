@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    is_tour_package = fields.Boolean(string="Es paquete de tours")
+    is_tour_package = fields.Boolean(string="Es paquete de tours",required=False, default=False)
     package_line_ids = fields.One2many(
         'tour.package.line', 'package_id', string='Componentes del paquete'
     )
