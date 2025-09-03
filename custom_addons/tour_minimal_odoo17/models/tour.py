@@ -27,6 +27,10 @@ class TourMinimal(models.Model):
     sale_order_ids = fields.One2many('sale.order', 'tour_id', string='Ventas Asociadas')
     product_id = fields.Many2one('product.product', string='Producto del Tour', help='Producto (Half Day, Full Day, etc.) para emparejar ventas SIB.')
     tour_type_id = fields.Many2one('tour.type', string='Tipo de tour', index=True)
+    is_overbooked = fields.Boolean(
+        string="Sobrevendido",
+        compute="_compute_is_overbooked",
+        store=True)
 
     state = fields.Selection([
         ('draft', 'Borrador'),
@@ -61,6 +65,15 @@ class TourMinimal(models.Model):
         default=False,
         help="Si este tour incluye o no el ticket de ingreso al parque"
     )
+
+    #calcular sobrevendido
+    @api.depends('participants_ids', 'max_capacity')
+    def _compute_is_overbooked(self):
+        for tour in self:
+            tour.is_overbooked = (
+                tour.max_capacity is not None and
+                len(tour.participants_ids) > tour.max_capacity
+            )
 
 
     @api.depends('guide_cost', 'driver_cost', 'vehicle_cost', 'cook_cost', 'waiters_cost')

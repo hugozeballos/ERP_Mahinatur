@@ -15,7 +15,6 @@
         'views/sale_order_inherit_views.xml',
         #'views/wizard/tour_selection_wizard_views.xml',
         #'views/wizard/tour_selection_external_wizard_views.xml',
-        #Ks'views/sale_order_form_inherit_tour.xml',
         'views/external_activity_views.xml',
         'views/hr_employee_views.xml',
         'views/product_template_package_views.xml',
@@ -24,11 +23,13 @@
         'views/tour_private_calendar_views.xml',
         'views/ticket_daily_counter_views.xml',
         'report/sale_order_report_inherit.xml',
+        'report/report_header_inherit.xml',
         'data/product_tour_leader_discount.xml',
+        'views/participant_move_wizard.xml',
     ],
     'assets': {
-    'web.report_assets_common': [
-        'tour_minimal_odoo17/static/src/css/report_indent.css',
+        'web.report_assets_common': [
+            'tour_minimal_odoo17/static/src/css/report_header.css',
         ],
     },
     "images": ['static/description/icon.png'],

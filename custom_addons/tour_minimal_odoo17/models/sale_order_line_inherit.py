@@ -169,12 +169,15 @@ class SaleOrderLineInherit(models.Model):
                     selected = tour
                     break
 
+            # Si no hay tour con cupo, igual lo asignamos al más cercano
             if not selected:
-                raise UserError(_(
-                    "No hay cupos suficientes en los tours SIB del %s para el tipo '%s'. "
-                    "Necesitas %d cupos."
-                ) % (fields.Date.to_string(line.service_date), tour_type.name, qty_needed))
-
+                selected = max(same_day, key=lambda t: t.max_capacity - len(t.participants_ids))
+                line.order_id.message_post(
+                    body=_("⚠️ Atención: El tour asignado no tiene cupos suficientes. "
+                        "Algunos participantes serán marcados como sobrevendidos."),
+                    message_type='comment',
+                    subtype_xmlid='mail.mt_note',
+                )
             # Asignar tour a la línea hija
             line.tour_id = selected.id
 

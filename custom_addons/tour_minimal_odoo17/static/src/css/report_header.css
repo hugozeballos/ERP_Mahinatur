@@ -1,0 +1,5 @@
+/* static/src/css/report_header.css */
+.o_report_layout_standard .header .row:first-child img {
+  max-height: 90px !important;
+  width: auto !important;
+}

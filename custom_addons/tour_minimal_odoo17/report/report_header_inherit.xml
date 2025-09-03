@@ -1,0 +1,50 @@
+<odoo>
+  <template id="mh_header_align_logo_plus_data"
+            inherit_id="web.external_layout_standard"
+            priority="95">
+
+    <!-- A) Reemplazar la PRIMERA fila (la que contiene name="moto") por: logo izq + datos der -->
+    <xpath expr="//*[@name='moto']/ancestor::div[@class='row'][1]" position="replace">
+      <div class="row" style="display:flex; align-items:flex-start; gap:4px; max-height:150px;">
+        <!-- Logo más grande -->
+        <div class="col-3 mb4" style="flex:0 0 auto;">
+          <img t-if="company.logo"
+               t-att-src="image_data_uri(company.logo)"
+               style="max-height:150px; width:auto;"
+               alt="Logo"/>
+          <h2 t-if="not company.logo" style="margin:0;">
+            <span t-field="company.name"/>
+          </h2>
+        </div>
+
+        <!-- Datos de la empresa a la derecha -->
+        <div class="col-9" style="flex:1 1 auto; margin-left:-100px; font-color:#444;">
+          <ul class="list-unstyled" name="company_address_list">
+            <li t-if="company.is_company_details_empty">
+              <span t-field="company.partner_id"
+                    t-options="{'widget':'contact','fields':['address','name'],'no_marker': true}"/>
+            </li>
+            <li t-else="">
+              <span t-field="company.company_details"/>
+            </li>
+            <li t-if="not forced_vat"/>
+            <li t-else="">
+              <t t-esc="company.country_id.vat_label or 'Tax ID'"/>:
+              <span t-esc="forced_vat"/>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </xpath>
+
+    <xpath expr="//div[@class='row zero_min_height']//div[@class='col-12']/div" position="attributes">
+        <attribute name="style">border-bottom: 1px solid #ccc;</attribute>
+    </xpath>
+
+    <!-- B) Eliminar la fila de dirección original para no duplicar -->
+    <xpath expr="//div[@name='company_address']/parent::div[@class='row']" position="replace">
+      <div/>
+    </xpath>
+
+  </template>
+</odoo>

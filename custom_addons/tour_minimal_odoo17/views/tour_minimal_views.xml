@@ -57,11 +57,17 @@
                     <notebook>
                         <page string="Participantes">
                             <field name="participants_ids">
-                                <tree editable="bottom">
+                                <tree editable="bottom" decoration-danger="is_overbooked">
+                                    <field name="is_overbooked" invisible="1"/>
                                     <field name="name"/>
                                     <field name="almuerzo" widget="boolean_toggle"/>
                                     <field name="tipo_almuerzo"/>
                                     <field name="sale_order_id"/>
+                                    <!-- Botón para mover participante -->
+                                    <button name="action_open_move_wizard"
+                                            string="Mover de Tour"
+                                            type="object"
+                                            class="oe_highlight"/>
                                 </tree>
                                 <form string="Participante">
                                     <sheet>

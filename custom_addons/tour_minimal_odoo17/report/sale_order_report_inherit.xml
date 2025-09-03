@@ -1,9 +1,142 @@
 <odoo>
-  <template id="report_saleorder_document_indent_zero_price" inherit_id="sale.report_saleorder_document">
-    <xpath expr="//tbody/tr" position="attributes">
-      <attribute name="t-att-class">
-        "'indented-line' if line.price_unit == 0 else ''"
-      </attribute>
+  <!-- Indentar descripción cuando es componente de paquete o el subtotal es 0 -->
+  <template id="report_saleorder_document_indent_zero_price"
+            inherit_id="sale.report_saleorder_document"
+            priority="20">
+
+    <!-- Reemplaza el span que imprime la descripción de la línea -->
+    <xpath expr="//span[@t-field='line.name']" position="replace">
+      <!-- Indenta si es componente del paquete O si el subtotal es 0 y no es nota/sección -->
+      <t t-if="(line.is_package_component or False) or (((line.price_subtotal or 0.0) == 0.0) and not line.display_type)">
+        <span t-field="line.name" style="margin-left: 18px;"/>
+      </t>
+      <t t-else="">
+        <span t-field="line.name"/>
+      </t>
     </xpath>
+
+    <!-- (Opcional) también puedes indentar notas si quieres -->
+    <!--
+    <xpath expr="//tr[contains(@class,'o_line_note')]//td[1]" position="attributes">
+      <attribute name="style">margin-left: 18px;</attribute>
+    </xpath>
+    -->
+  </template>
+  <template id="report_saleorder_document_extra_clean"
+            inherit_id="sale.report_saleorder_document"
+            priority="30">
+
+    <!-- Insertar ANTES de la tabla principal de líneas -->
+    <xpath expr="//table[contains(@class, 'o_main_table')]" position="before">
+       <!-- Línea divisoria superior (única) -->
+      <div style="border-top:1px solid #000; margin: 5px 0 10px 0;"></div>
+      <table class="table table-borderless" style="width:100%; margin: 0 0 6px 0;">
+        <colgroup>
+          <col style="width:33.33%;"/>
+          <col style="width:33.33%;"/>
+          <col style="width:33.33%;"/>
+        </colgroup>
+        <tbody>
+          <tr>
+            <!-- Check-in -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Check-in</div>
+              <div style="font-size:16px; white-space:nowrap;">
+                <t t-if="'check_in' in doc._fields and doc.check_in">
+                  <span t-field="doc.check_in" t-options="{'widget':'date'}"></span>
+                </t>
+                <t t-if="not ('check_in' in doc._fields and doc.check_in)">-</t>
+              </div>
+            </td>
+
+            <!-- Check-out -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Check-out</div>
+              <div style="font-size:16px; white-space:nowrap;">
+                <t t-if="'check_out' in doc._fields and doc.check_out">
+                  <span t-field="doc.check_out" t-options="{'widget':'date'}"></span>
+                </t>
+                <t t-if="not ('check_out' in doc._fields and doc.check_out)">-</t>
+              </div>
+            </td>
+
+            <!-- Lista de precios -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Lista de precios</div>
+              <div style="font-size:16px;">
+                <t t-if="doc.pricelist_id">
+                  <t t-esc="doc.pricelist_id.display_name"></t>
+                </t>
+                <t t-if="not doc.pricelist_id">-</t>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <!-- Vuelo IN -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Vuelo IN</div>
+              <div style="font-size:16px;">
+                <t t-if="'flight_in' in doc._fields and doc.flight_in">
+                  <t t-esc="doc.flight_in"></t>
+                </t>
+                <t t-if="not ('flight_in' in doc._fields and doc.flight_in)">-</t>
+              </div>
+            </td>
+
+            <!-- Vuelo OUT -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Vuelo OUT</div>
+              <div style="font-size:16px;">
+                <t t-if="'flight_out' in doc._fields and doc.flight_out">
+                  <t t-esc="doc.flight_out"></t>
+                </t>
+                <t t-if="not ('flight_out' in doc._fields and doc.flight_out)">-</t>
+              </div>
+            </td>
+
+            <!-- Hotel -->
+            <td style="vertical-align:top; padding:2px 8px 4px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Hotel</div>
+              <div style="font-size:16px;">
+                <t t-if="'hotel' in doc._fields and doc.hotel">
+                  <t t-esc="doc.hotel"></t>
+                </t>
+                <t t-if="not ('hotel' in doc._fields and doc.hotel)">-</t>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <!-- Código Agencia -->
+            <td style="vertical-align:top; padding:2px 8px 6px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Código Agencia</div>
+              <div style="font-size:16px;">
+                <t t-if="'external_agency_code' in doc._fields and doc.external_agency_code">
+                  <t t-esc="doc.external_agency_code"></t>
+                </t>
+                <t t-if="not ('external_agency_code' in doc._fields and doc.external_agency_code)">-</t>
+              </div>
+            </td>
+
+            <!-- Cant. Tour Líder -->
+            <td style="vertical-align:top; padding:2px 8px 6px 0;">
+              <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Cant. Tour Líder</div>
+              <div style="font-size:16px;">
+                <t t-if="'tour_leader_count' in doc._fields and doc.tour_leader_count">
+                  <t t-esc="doc.tour_leader_count"></t>
+                </t>
+                <t t-if="not ('tour_leader_count' in doc._fields and doc.tour_leader_count)">-</t>
+              </div>
+            </td>
+
+            <!-- Celda libre (o úsala para Observaciones) -->
+            <td style="vertical-align:top; padding:2px 0 0 0;"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="border-top:1px solid #000; margin: 5px 0 10px 0;"></div>
+    </xpath>
+
   </template>
 </odoo>
