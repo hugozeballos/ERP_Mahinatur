@@ -20,10 +20,10 @@ class SaleOrder(models.Model):
     hotel_id = fields.Many2one('res.partner', string='Hotel', domain=[('is_hotel', '=', True)], required=False)
     
     #BORRAR ESTAN POR SI ACASO NO FUNCIONAN LOS NUEVOS
-    #flight_in = fields.Char(string='Vuelo In')
-    #flight_out = fields.Char(string='Vuelo Out')
-    #hotel = fields.Char(string='Hotel')
-
+    flight_in  = fields.Char(related='flight_in_id.name', readonly=True)
+    flight_out = fields.Char(related='flight_out_id.name', readonly=True)
+    hotel      = fields.Char(related='hotel_id.display_name', readonly=True)
+    
     # Entero, no m2m: cuántos líderes aplican
     tour_leader_count = fields.Integer(string="Tour Líderes", default=0)
 
