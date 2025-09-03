@@ -77,10 +77,10 @@
             <td style="vertical-align:top; padding:2px 8px 4px 0;">
               <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Vuelo IN</div>
               <div style="font-size:16px;">
-                <t t-if="'flight_in' in doc._fields and doc.flight_in">
-                  <t t-esc="doc.flight_in"></t>
+                <t t-if="'flight_in_id' in doc._fields and doc.flight_in_id">
+                  <t t-esc="doc.flight_in_id"></t>
                 </t>
-                <t t-if="not ('flight_in' in doc._fields and doc.flight_in)">-</t>
+                <t t-if="not ('flight_in_id' in doc._fields and doc.flight_in_id)">-</t>
               </div>
             </td>
 
@@ -88,10 +88,10 @@
             <td style="vertical-align:top; padding:2px 8px 4px 0;">
               <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Vuelo OUT</div>
               <div style="font-size:16px;">
-                <t t-if="'flight_out' in doc._fields and doc.flight_out">
-                  <t t-esc="doc.flight_out"></t>
+                <t t-if="'flight_out_id' in doc._fields and doc.flight_out_id">
+                  <t t-esc="doc.flight_out_id"></t>
                 </t>
-                <t t-if="not ('flight_out' in doc._fields and doc.flight_out)">-</t>
+                <t t-if="not ('flight_out_id' in doc._fields and doc.flight_out_id)">-</t>
               </div>
             </td>
 
@@ -99,10 +99,10 @@
             <td style="vertical-align:top; padding:2px 8px 4px 0;">
               <div style="font-size:16px; color:#000; letter-spacing:.2px; margin-bottom:2px;">Hotel</div>
               <div style="font-size:16px;">
-                <t t-if="'hotel' in doc._fields and doc.hotel">
-                  <t t-esc="doc.hotel"></t>
+                <t t-if="'hotel_id' in doc._fields and doc.hotel_id">
+                  <t t-esc="doc.hotel_id"></t>
                 </t>
-                <t t-if="not ('hotel' in doc._fields and doc.hotel)">-</t>
+                <t t-if="not ('hotel_id' in doc._fields and doc.hotel_id)">-</t>
               </div>
             </td>
           </tr>
