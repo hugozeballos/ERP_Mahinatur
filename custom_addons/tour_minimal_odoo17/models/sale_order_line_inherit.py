@@ -195,6 +195,10 @@ class SaleOrderLineInherit(models.Model):
                         'tour_id': selected.id,
                         'sale_order_id': line.order_id.id,
                         'sale_order_line_id': line.id,
+                        # Propagar del pedido:
+                        'flight_in_id': line.order_id.flight_in_id.id if line.order_id.flight_in_id else False,
+                        'flight_out_id': line.order_id.flight_out_id.id if line.order_id.flight_out_id else False,
+                        'hotel_id': line.order_id.hotel_id.id if line.order_id.hotel_id else False,
                     })
                 self.env['tour.participant'].create(vals)
             _logger.info("[SIB] %s PAX asignados a tour %s (%s) para línea %s",

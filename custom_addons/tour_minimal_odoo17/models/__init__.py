@@ -1,7 +1,7 @@
 from . import tour
 from . import participant
 from . import sale_order_line_inherit
-#from . import participant_wizard_line
+from . import flight
 from . import sale_order_inherit
 from . import product_template_extension
 from . import hr_employee_extend
@@ -10,3 +10,4 @@ from . import external_reservation
 from . import product_package
 from . import tour_type
 from . import ticket_daily_counter
+from . import res_partner_extend

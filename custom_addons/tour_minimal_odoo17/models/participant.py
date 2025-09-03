@@ -21,6 +21,10 @@ class TourParticipant(models.Model):
         string="Sobrevendido",
         compute="_compute_is_overbooked",
         store=True)
+    
+    flight_in_id = fields.Many2one('tour.flight', string='Vuelo In')
+    flight_out_id = fields.Many2one('tour.flight', string='Vuelo Out')
+    hotel_id = fields.Many2one('res.partner', string='Hotel', domain="[('is_hotel','=',True)]")
 
     #Calcular sobrevendido
     @api.depends('tour_id', 'tour_id.participants_ids')

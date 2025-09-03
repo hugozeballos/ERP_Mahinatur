@@ -32,9 +32,15 @@
           <xpath expr="//field[@name='partner_id']" position="after">
               <field name="check_in"/>
               <field name="check_out"/>
-              <field name="flight_in"/>
-              <field name="flight_out"/>
-              <field name="hotel"/>
+              <field name="flight_in_id"
+                    options="{'no_create': False, 'no_create_edit': False}"/>
+              <field name="flight_out_id"
+                    options="{'no_create': False, 'no_create_edit': False}"/>
+              <field name="hotel_id"
+                    domain="[('is_hotel','=',True)]"
+                    context="{'default_is_hotel': True}"
+                    options="{'no_create': False, 'no_create_edit': False}"/>
+
           </xpath>
       </field>
   </record>

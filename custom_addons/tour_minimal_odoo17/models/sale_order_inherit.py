@@ -13,9 +13,16 @@ class SaleOrder(models.Model):
     external_agency_code = fields.Char(string="Código Agencia Externa")
     check_in = fields.Date(string='Check-in')
     check_out = fields.Date(string='Check-out')
-    flight_in = fields.Char(string='Vuelo In')
-    flight_out = fields.Char(string='Vuelo Out')
-    hotel = fields.Char(string='Hotel')
+    
+    # NUEVOS: mismos modelos que en participante
+    flight_in_id = fields.Many2one('tour.flight', string='Vuelo In')
+    flight_out_id = fields.Many2one('tour.flight', string='Vuelo Out')
+    hotel_id = fields.Many2one('res.partner', string='Hotel', domain=[('is_hotel', '=', True)])
+    
+    #BORRAR ESTAN POR SI ACASO NO FUNCIONAN LOS NUEVOS
+    #flight_in = fields.Char(string='Vuelo In')
+    #flight_out = fields.Char(string='Vuelo Out')
+    #hotel = fields.Char(string='Hotel')
 
     # Entero, no m2m: cuántos líderes aplican
     tour_leader_count = fields.Integer(string="Tour Líderes", default=0)

@@ -63,6 +63,9 @@
                                     <field name="almuerzo" widget="boolean_toggle"/>
                                     <field name="tipo_almuerzo"/>
                                     <field name="sale_order_id"/>
+                                    <field name="flight_in_id" options="{'no_create': False, 'no_create_edit': False}"/>
+                                    <field name="flight_out_id" options="{'no_create': False, 'no_create_edit': False}"/>
+                                    <field name="hotel_id" domain="[('is_hotel','=',True)]" options="{'no_create': False, 'no_create_edit': False}"/>
                                     <!-- Botón para mover participante -->
                                     <button name="action_open_move_wizard"
                                             string="Mover de Tour"
