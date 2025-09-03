@@ -17,7 +17,7 @@ class SaleOrder(models.Model):
     # NUEVOS: mismos modelos que en participante
     flight_in_id = fields.Many2one('tour.flight', string='Vuelo In')
     flight_out_id = fields.Many2one('tour.flight', string='Vuelo Out')
-    hotel_id = fields.Many2one('res.partner', string='Hotel', domain=[('is_hotel', '=', True)])
+    hotel_id = fields.Many2one('res.partner', string='Hotel', domain=[('is_hotel', '=', True)], required=False)
     
     #BORRAR ESTAN POR SI ACASO NO FUNCIONAN LOS NUEVOS
     #flight_in = fields.Char(string='Vuelo In')
