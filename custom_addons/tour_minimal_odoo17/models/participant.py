@@ -34,7 +34,7 @@ class TourParticipant(models.Model):
             if not tour or not tour.max_capacity:
                 rec.is_overbooked = False
                 continue
-            participants = tour.participants_ids.sorted('id')
+            participants = tour.participants_ids
             allowed = participants[:tour.max_capacity]
             rec.is_overbooked = rec not in allowed
 

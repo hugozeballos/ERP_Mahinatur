@@ -3,7 +3,7 @@
     "version": "1.0",
     "summary": "Módulo mínimo para Odoo 17",
     "author": "ChatGPT",
-    "depends": ["base","product",'hr_contract',"hr","fleet","sale","hr_expense","bi_hr_payroll"],
+    "depends": ["base","product",'hr_contract',"hr","fleet","sale","hr_expense","bi_hr_payroll","mail"],
     'data': [
         #'security/groups.xml',
         'security/ir.model.access.csv',
@@ -26,6 +26,7 @@
         'report/report_header_inherit.xml',
         'data/product_tour_leader_discount.xml',
         'views/participant_move_wizard.xml',
+        'views/tour_split_wizard_views.xml',
     ],
     'assets': {
         'web.report_assets_common': [

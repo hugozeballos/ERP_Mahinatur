@@ -12,3 +12,4 @@ access_ticket_daily_counter_user,ticket.daily.counter.user,model_ticket_daily_co
 access_participant_move_wizard,tour.participant.move.wizard,model_tour_participant_move_wizard,,1,1,1,0
 access_tour_flight_user,tour.flight.user,tour_minimal_odoo17.model_tour_flight,,1,1,1,0
 access_ticket_counter_line,ticket.counter.line,model_ticket_counter_line,,1,1,1,1
+access_tour_split_wizard,tour.split.wizard,model_tour_split_wizard,,1,1,1,1

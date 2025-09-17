@@ -1,0 +1,34 @@
+<odoo>
+  <record id="view_tour_split_wizard_form" model="ir.ui.view">
+    <field name="name">tour.split.wizard.form</field>
+    <field name="model">tour.split.wizard</field>
+    <field name="arch" type="xml">
+        <form string="Dividir Tour">
+        <sheet>
+            <group col="1">
+            <field name="tour_id" readonly="1"/>
+            </group>
+
+            <!-- Mensaje a ancho completo -->
+            <div class="o_alert o_alert_info"
+                style="white-space: normal; width:100%; padding:12px; margin:0 12px 12px;">
+            Este tour está sobrevendido. Se creará un nuevo tour en la misma fecha y se moverán
+            los participantes sin asiento. Asigna otro vehículo/guía/chofer al nuevo tour.
+            </div>
+        </sheet>
+        <footer>
+            <button string="Dividir ahora" type="object" name="action_split" class="btn-primary"/>
+            <button string="Cancelar" special="cancel" class="btn-secondary"/>
+        </footer>
+        </form>
+    </field>
+  </record>
+
+  <record id="action_tour_split_wizard" model="ir.actions.act_window">
+    <field name="name">Dividir Tour</field>
+    <field name="res_model">tour.split.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_tour_id': active_id}</field>
+  </record>
+</odoo>
