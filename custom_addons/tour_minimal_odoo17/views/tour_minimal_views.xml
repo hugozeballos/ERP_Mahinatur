@@ -58,10 +58,18 @@
                         <page string="Participantes">
                             <field name="participants_ids">
                                 <tree editable="bottom" decoration-danger="is_overbooked">
-                                    <field name="is_overbooked" invisible="1"/>
+                                    <field name="is_overbooked" invisible="1" column_invisible="1"/>
+                                    <field name="index_in_tour" string="#"/>
                                     <field name="name"/>
-                                    <field name="almuerzo" widget="boolean_toggle"/>
-                                    <field name="tipo_almuerzo"/>
+                                    <field name="almuerzo" invisible="1" column_invisible="1"/>
+                                    <field name="tipo_almuerzo" invisible="1" column_invisible="1"/>
+
+                                    <!-- botón: avanza al siguiente tipo -->
+                                    <button name="action_cycle_lunch" type="object"
+                                            class="o_lunch_icon" icon="fa-rotate-right" title="Cambiar almuerzo"/>
+
+                                    <!-- Solo display, con colores -->
+                                    <field name="lunch_badge" widget="html" string="Almuerzo"/>
                                     <field name="sale_order_id"/>
                                     <field name="flight_in_id" options="{'no_create': False, 'no_create_edit': False}"/>
                                     <field name="flight_out_id" options="{'no_create': False, 'no_create_edit': False}"/>
@@ -131,6 +139,7 @@
     <record id="action_tour_minimal" model="ir.actions.act_window">
         <field name="name">Gestión de Tours</field>
         <field name="res_model">tour.minimal</field>
+        <field name="domain" eval="False"/>  <!-- o [] -->
         <field name="view_mode">calendar,tree,form</field>
         <field name="view_id" ref="view_tour_minimal_calendar"/>
         <field name="target">current</field>
