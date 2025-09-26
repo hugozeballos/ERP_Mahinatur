@@ -1,0 +1,57 @@
+/* espacio para el icono dentro de la celda del badge */
+.o_list_view td[data-name="lunch_badge"]{
+  position: relative;
+  padding-right: 28px !important;
+  margin-left: -28px !important;
+  white-space: nowrap;
+}
+
+/* columna del botón casi nula */
+.o_list_view td:has(> .o_lunch_icon),
+.o_list_view th:has(> .o_lunch_icon){
+  width: 1px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* superponer el icono dentro de la celda anterior, a la derecha */
+.o_list_view td:has(> .o_lunch_icon) .o_lunch_icon{
+  margin-left: -24px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid #ced4da;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #fff; color:#6c757d;
+}
+.o_list_view td:has(> .o_lunch_icon) .o_lunch_icon:hover{
+  background:#f1f3f5; color:#343a40;
+}
+
+/* comprimir columna del botón */
+.o_list_view td.o_list_button,
+.o_list_view th.o_list_button{
+  width: 1px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* dar espacio dentro de la celda del badge */
+.o_list_view td[data-name="lunch_badge"]{
+  position: relative;
+  padding-right: 28px !important;
+  white-space: nowrap;
+}
+
+/* botón redondo sobre la celda anterior */
+.o_list_view td.o_list_button .o_lunch_icon{
+  margin-left: -24px;                 /* lo “mete” en la celda de Almuerzo */
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid #ced4da;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #fff;
+  color: #6c757d !important;
+  padding: 0; text-decoration: none !important;
+}
+.o_list_view td.o_list_button .o_lunch_icon:hover{
+  background: #f1f3f5; color: #343a40 !important;
+}
