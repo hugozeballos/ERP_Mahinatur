@@ -327,12 +327,34 @@ class SaleOrderLineInherit(models.Model):
             if not counter:
                 counter = self.env['ticket.daily.counter'].create({'date': ticket_date})
 
-            qty = int(line.product_uom_qty)
+            # 🚨 SIEMPRE: agregar la orden de venta al M2M (no sobreescribe)
+            counter.write({'sale_order_ids': [(4, line.order_id.id)]})
 
-            if 'nac' in product.name.lower():
+            qty = int(line.product_uom_qty)
+            ticket_type = 'nac' if 'nac' in product.name.lower() else 'ext'
+
+
+            if ticket_type == 'nac':
                 counter.write({'national_qty': counter.national_qty + qty})
             else:
                 counter.write({'foreigner_qty': counter.foreigner_qty + qty})
+
+                    # Crear o actualizar línea de detalle
+            summary_line = self.env['ticket.counter.line'].search([
+                ('counter_id', '=', counter.id),
+                ('sale_order_id', '=', line.order_id.id),
+                ('ticket_type', '=', ticket_type)
+            ], limit=1)
+
+            if summary_line:
+                summary_line.qty += qty
+            else:
+                self.env['ticket.counter.line'].create({
+                    'counter_id': counter.id,
+                    'sale_order_id': line.order_id.id,
+                    'ticket_type': ticket_type,
+                    'qty': qty
+                })
 
 
     def _rollback_ticket_counter(self):
@@ -350,8 +372,23 @@ class SaleOrderLineInherit(models.Model):
                 continue
 
             qty = int(line.product_uom_qty)
+            ticket_type = 'nac' if 'nac' in product.name.lower() else 'ext'
 
-            if 'nac' in product.name.lower():
+            if ticket_type == 'nac':
                 counter.write({'national_qty': max(0, counter.national_qty - qty)})
             else:
                 counter.write({'foreigner_qty': max(0, counter.foreigner_qty - qty)})
+
+            # Eliminar o ajustar línea de detalle
+            summary_line = self.env['ticket.counter.line'].search([
+                ('counter_id', '=', counter.id),
+                ('sale_order_id', '=', line.order_id.id),
+                ('ticket_type', '=', ticket_type)
+            ], limit=1)
+
+            if summary_line:
+                new_qty = max(0, summary_line.qty - qty)
+                if new_qty == 0:
+                    summary_line.unlink()
+                else:
+                    summary_line.qty = new_qty

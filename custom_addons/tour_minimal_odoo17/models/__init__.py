@@ -1,4 +1,5 @@
 from . import tour
+from . import res_partner_extend
 from . import participant
 from . import sale_order_line_inherit
 from . import flight
