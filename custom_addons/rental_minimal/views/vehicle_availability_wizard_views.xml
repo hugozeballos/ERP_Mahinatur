@@ -12,10 +12,46 @@
                 <footer>
                     <button name="action_check_availability" type="object" class="btn-primary" string="Buscar"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button name="create_from_vehicle_action"
+                        type="object"
+                        string="Agregar a Orden de Venta"
+                        class="btn-primary"/>
                 </footer>
             </form>
         </field>
     </record>
+
+    <!-- Vista de resultados del wizard -->
+    <record id="view_vehicle_availability_results_form" model="ir.ui.view">
+        <field name="name">vehicle.availability.wizard.results.form</field>
+        <field name="model">vehicle.availability.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Autos disponibles">
+                <sheet>
+                    <group>
+                        <field name="start_date" readonly="1"/>
+                        <field name="end_date" readonly="1"/>
+                    </group>
+                    <!-- Aquí se incrusta la lista de autos dentro del wizard -->
+                    <field name="available_vehicle_ids">
+                        <tree editable="bottom" string="Seleccionar vehículos disponibles">
+                            <field name="license_plate"/>
+                            <field name="model_id"/>
+                            <field name="price_per_day"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="create_from_vehicle_action"
+                            type="object"
+                            string="Agregar a Orden de Venta"
+                            class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
 
     <record id="view_vehicle_availability_tree" model="ir.ui.view">
         <field name="name">fleet.vehicle.tree.availability</field>

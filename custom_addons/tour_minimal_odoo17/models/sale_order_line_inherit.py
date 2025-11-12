@@ -1,7 +1,7 @@
 from odoo import models, fields, api, _ 
 from odoo.exceptions import UserError
 import logging, inspect, os
-from datetime import datetime, time
+from datetime import datetime, date as date_cls, time
 _logger = logging.getLogger(__name__)
 _logger.warning(">> tour_minimal_odoo17 loaded from: %s", __file__)
 
@@ -12,7 +12,7 @@ class SaleOrderLineInherit(models.Model):
         'sale.order.line', string='Línea padre (paquete)', ondelete='cascade'
     )
     is_package_component = fields.Boolean(string='Es componente de paquete', default=False)
-    service_date = fields.Date(string='Fecha del servicio (línea)')
+    service_date = fields.Datetime(string='Fecha del servicio (línea)' )
     # (Asegúrate de tener los campos si vas a guardar el tour ahí)
     tour_id = fields.Many2one('tour.minimal', string='Tour')
     # Heredado del producto tour
@@ -153,7 +153,7 @@ class SaleOrderLineInherit(models.Model):
             ])
             _logger.warning("[TOUR SIB] Tours disponibles para tipo '%s': %s",
                 tour_type.name, tours.mapped('date_start'))
-            same_day = tours.filtered(lambda t: t.date_start and t.date_start.date() == line.service_date)
+            same_day = tours.filtered(lambda t: t.date_start and t.date_start.date() == line.service_date.date())
             _logger.warning("[TOUR SIB] Tours el %s: %s", line.service_date,
                             same_day.mapped('date_start'))
             if not same_day:
@@ -231,7 +231,8 @@ class SaleOrderLineInherit(models.Model):
                 raise UserError(_("El producto '%s' no tiene asignado un 'Tipo de tour'.") % line.product_id.display_name)
 
             # Hora por defecto (ajústala si luego agregamos un campo en producto)
-            date_start_dt = datetime.combine(line.service_date, time(hour=9, minute=0))
+            date_start_dt = line.service_date.date() or datetime.combine(fields.Date.context_today(self), time(9,0))
+
 
             vals = {
                 'name': "%s - %s" % (tour_type.name, line.order_id.partner_id.display_name or 'Privado'),
@@ -281,7 +282,7 @@ class SaleOrderLineInherit(models.Model):
                 ) % line.display_name)
 
 
-            date_start = datetime.combine(line.service_date, time(hour=9, minute=0))
+            date_start = datetime.combine(line.service_date.date(), time(hour=9, minute=0))
             vals = {
                 'name': f"{line.product_id.display_name or 'Cliente'}",
                 'service_kind': tmpl.service_kind,
@@ -319,7 +320,7 @@ class SaleOrderLineInherit(models.Model):
             if not product.categ_id or 'ticket' not in product.categ_id.name.lower():
                 continue
 
-            ticket_date = line.service_date
+            ticket_date = line.service_date.date()
             if not ticket_date:
                 continue
 
@@ -363,7 +364,7 @@ class SaleOrderLineInherit(models.Model):
             if not product.categ_id or 'ticket' not in product.categ_id.name.lower():
                 continue
 
-            ticket_date = line.service_date
+            ticket_date = line.service_date.date()
             if not ticket_date:
                 continue
 
