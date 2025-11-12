@@ -25,6 +25,11 @@ class FleetVehicle(models.Model):
         default="available",
         tracking=True,
     )
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Moneda',
+        default=lambda self: self.env.company.currency_id
+    )
     price_per_day = fields.Monetary(string="Precio por día", currency_field="currency_id")
 
     # models/fleet_vehicle_extend.py  (añade el campo al bloque de definición)
@@ -71,6 +76,7 @@ class FleetVehicle(models.Model):
                         "list_price": veh.price_per_day or 0.0,
                         "sale_ok": True,
                         "purchase_ok": False,
+                        'vehicle_id': self.id,
                         "is_tour_addon": False,
                     }
                 )
