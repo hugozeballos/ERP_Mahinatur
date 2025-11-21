@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
                              related='hotel_id.display_name', readonly=True)
     #flight_in = fields.Char(string='Vuelo In')
     #flight_out = fields.Char(string='Vuelo Out')
-    #hotel = fields.Char(string='Hotel')    
+    #hotel = fields.Char(string='Hotel')
 
     # Entero, no m2m: cuántos líderes aplican
     tour_leader_count = fields.Integer(string="Tour Líderes", default=0)
