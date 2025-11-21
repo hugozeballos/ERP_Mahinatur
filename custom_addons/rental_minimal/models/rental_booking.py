@@ -95,10 +95,13 @@ class RentalBooking(models.Model):
     # Estados / acciones
     # ---------------------------------------------------------------- #
     def action_confirm(self):
+        _logger.info("Confirmando reserva %s", self.name        )
         for rec in self:
             if rec.vehicle_id.rental_status != "available":
                 raise UserError(_("El vehículo no está disponible."))
             # 1) Cambiar estados
+            _logger.info("cambiando estados")
+
             rec.vehicle_id.rental_status = "reserved"
             rec.state = "confirmed"
             # 2) Crear SO en borrador

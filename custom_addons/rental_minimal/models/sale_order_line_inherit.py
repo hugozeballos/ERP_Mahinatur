@@ -17,23 +17,6 @@ class SaleOrderLine(models.Model):
     service_date = fields.Datetime(string='Fecha y hora del servicio (renta)', help='Usado para calcular inicio y fin del arriendo')
 
 
-    @api.constrains('rental_start_date', 'rental_end_date', 'product_uom_qty')
-    def _check_rental_dates_and_qty(self):
-        for line in self:
-            if line.product_id and line.product_id.is_vehicle_rental:
-                if not line.rental_start_date or not line.rental_end_date:
-                    raise ValidationError("Debe especificar fechas de inicio y fin para vehículos en arriendo.")
-                rental_days = (line.rental_end_date - line.rental_start_date).days + \
-                            (1 if (line.rental_end_date - line.rental_start_date).seconds else 0)
-                if rental_days <= 0:
-                    raise ValidationError("La fecha de fin debe ser posterior a la fecha de inicio.")
-                if rental_days != int(line.product_uom_qty):
-                    raise ValidationError(
-                        f"La cantidad ({int(line.product_uom_qty)}) debe ser igual "
-                        f"a los días de arriendo ({rental_days} días)."
-                    )
-
-
     @api.onchange('service_date', 'product_uom_qty')
     def _onchange_service_fields(self):
         for line in self:
